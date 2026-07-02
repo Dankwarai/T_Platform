@@ -56,6 +56,15 @@ export default function HomeScreen() {
         <Text style={styles.primaryButtonText}>Find tailors</Text>
       </Pressable>
 
+      {profile?.role === "customer" && (
+        <Pressable
+          style={styles.button}
+          onPress={() => router.push("/measurements")}
+        >
+          <Text style={styles.buttonText}>My measurements</Text>
+        </Pressable>
+      )}
+
       <Pressable style={styles.button} onPress={handleLogout}>
         <Text style={styles.buttonText}>Log out</Text>
       </Pressable>
