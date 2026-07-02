@@ -1,9 +1,17 @@
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import {
+  createClient,
+  type SupabaseClient,
+  type SupabaseClientOptions,
+} from "@supabase/supabase-js";
 import type { Database } from "./database.types";
 
 // Accepts url/anonKey as params rather than reading env vars directly,
 // since Next.js (NEXT_PUBLIC_*) and Expo (EXPO_PUBLIC_*) expose env vars
 // differently — each app supplies its own at the call site.
+//
+// `options` is passed straight through to supabase-js — e.g. mobile passes
+// a custom `auth.storage` (AsyncStorage) for session persistence, since
+// there's no localStorage in React Native.
 //
 // Falls back to a placeholder instead of throwing when unset, so the app
 // can still boot before a real Supabase project is wired up (createClient
@@ -12,6 +20,7 @@ import type { Database } from "./database.types";
 export function createSupabaseClient(
   url: string,
   anonKey: string,
+  options?: SupabaseClientOptions<"public">,
 ): SupabaseClient<Database> {
   if (!url || !anonKey) {
     console.warn(
@@ -22,6 +31,7 @@ export function createSupabaseClient(
   return createClient<Database>(
     url || "https://placeholder.supabase.co",
     anonKey || "placeholder-anon-key",
+    options,
   );
 }
 
