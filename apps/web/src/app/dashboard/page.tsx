@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { LogoutButton } from "./logout-button";
@@ -41,6 +42,12 @@ export default async function DashboardPage() {
           {user.email} · {profile?.role ?? "unknown role"}
         </p>
       </div>
+      <Link
+        href="/tailors"
+        className="h-11 rounded-full bg-foreground px-5 leading-[44px] text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc]"
+      >
+        Find tailors
+      </Link>
       <LogoutButton />
     </div>
   );

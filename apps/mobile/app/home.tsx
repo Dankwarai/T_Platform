@@ -49,6 +49,13 @@ export default function HomeScreen() {
         {user?.email} · {profile?.role ?? "unknown role"}
       </Text>
 
+      <Pressable
+        style={[styles.button, styles.primaryButton]}
+        onPress={() => router.push("/tailors")}
+      >
+        <Text style={styles.primaryButtonText}>Find tailors</Text>
+      </Pressable>
+
       <Pressable style={styles.button} onPress={handleLogout}>
         <Text style={styles.buttonText}>Log out</Text>
       </Pressable>
@@ -82,6 +89,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   buttonText: {
+    fontWeight: "600",
+  },
+  primaryButton: {
+    backgroundColor: "#111",
+    borderColor: "#111",
+  },
+  primaryButtonText: {
+    color: "#fff",
     fontWeight: "600",
   },
 });
