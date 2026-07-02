@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import type { Database } from "@t-flatform/supabase-client";
 
-const PROTECTED_PATHS = ["/dashboard"];
+const PROTECTED_PATHS = ["/dashboard", "/profile"];
 const AUTH_ONLY_PATHS = ["/login", "/signup"];
 
 // Called from proxy.ts on every request: refreshes the auth cookie and

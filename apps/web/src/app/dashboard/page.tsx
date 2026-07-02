@@ -19,6 +19,18 @@ export default async function DashboardPage() {
     .eq("id", user.id)
     .single();
 
+  if (profile?.role === "tailor") {
+    const { data: tailorProfile } = await supabase
+      .from("tailor_profiles")
+      .select("business_name")
+      .eq("user_id", user.id)
+      .single();
+
+    if (tailorProfile?.business_name === "") {
+      redirect("/profile/complete");
+    }
+  }
+
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-6 bg-zinc-50 px-6 dark:bg-black">
       <div className="flex w-full max-w-sm flex-col gap-2 text-center">

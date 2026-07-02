@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useRouter } from "expo-router";
 import { useAuth } from "../contexts/auth-context";
 import { supabase } from "../lib/supabase";
 
@@ -7,6 +8,7 @@ type Profile = { full_name: string; role: string };
 
 export default function HomeScreen() {
   const { user } = useAuth();
+  const router = useRouter();
   const [profile, setProfile] = useState<Profile | null>(null);
 
   useEffect(() => {
@@ -18,6 +20,20 @@ export default function HomeScreen() {
       .single()
       .then(({ data }) => setProfile(data));
   }, [user]);
+
+  useEffect(() => {
+    if (!user || profile?.role !== "tailor") return;
+    supabase
+      .from("tailor_profiles")
+      .select("business_name")
+      .eq("user_id", user.id)
+      .single()
+      .then(({ data }) => {
+        if (data?.business_name === "") {
+          router.replace("/profile-complete");
+        }
+      });
+  }, [user, profile, router]);
 
   async function handleLogout() {
     await supabase.auth.signOut();
