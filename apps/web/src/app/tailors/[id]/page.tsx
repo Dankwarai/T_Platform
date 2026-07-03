@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { ReviewForm } from "./review-form";
 
 export default async function TailorDetailPage({
   params,
@@ -58,6 +59,8 @@ export default async function TailorDetailPage({
             <p className="mt-2 text-black dark:text-zinc-50">{tailor.bio}</p>
           )}
         </div>
+
+        <ReviewForm tailorId={id} />
 
         <div className="flex flex-col gap-3">
           <h2 className="text-lg font-medium text-black dark:text-zinc-50">

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
+import { ReviewForm } from "../../components/ReviewForm";
 import { supabase } from "../../lib/supabase";
 
 type Tailor = {
@@ -25,7 +26,7 @@ export default function TailorDetailScreen() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const loadData = useCallback(() => {
     if (!id) return;
 
     Promise.all([
@@ -48,6 +49,10 @@ export default function TailorDetailScreen() {
       setLoading(false);
     });
   }, [id]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   if (loading) {
     return (
@@ -80,6 +85,10 @@ export default function TailorDetailScreen() {
           : "No reviews yet"}
       </Text>
       {tailor.bio && <Text style={styles.bio}>{tailor.bio}</Text>}
+
+      <View style={styles.reviewFormWrapper}>
+        <ReviewForm tailorId={tailor.id} onChange={loadData} />
+      </View>
 
       <Text style={styles.sectionTitle}>Reviews</Text>
       {reviews.length === 0 ? (
@@ -117,6 +126,9 @@ const styles = StyleSheet.create({
   },
   bio: {
     marginTop: 8,
+  },
+  reviewFormWrapper: {
+    marginTop: 12,
   },
   sectionTitle: {
     marginTop: 16,
