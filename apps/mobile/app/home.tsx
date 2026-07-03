@@ -65,6 +65,19 @@ export default function HomeScreen() {
         </Pressable>
       )}
 
+      {profile?.role === "tailor" && (
+        <Pressable
+          style={styles.button}
+          onPress={() => router.push("/tailor-prices")}
+        >
+          <Text style={styles.buttonText}>Set prices</Text>
+        </Pressable>
+      )}
+
+      <Pressable style={styles.button} onPress={() => router.push("/jobs")}>
+        <Text style={styles.buttonText}>My jobs</Text>
+      </Pressable>
+
       <Pressable style={styles.button} onPress={() => router.push("/rankings")}>
         <Text style={styles.buttonText}>Top tailors</Text>
       </Pressable>

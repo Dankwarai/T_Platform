@@ -9,6 +9,8 @@ const PROTECTED_PATHS = [
   "/measurements",
   "/rankings",
   "/suggestions",
+  "/tailor",
+  "/jobs",
 ];
 const AUTH_ONLY_PATHS = ["/login", "/signup"];
 

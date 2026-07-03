@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { FollowButton } from "../../components/FollowButton";
+import { RequestJobForm } from "../../components/RequestJobForm";
 import { ReviewForm } from "../../components/ReviewForm";
 import { supabase } from "../../lib/supabase";
 
@@ -111,6 +112,10 @@ export default function TailorDetailScreen() {
         </Text>
       )}
       {tailor.bio && <Text style={styles.bio}>{tailor.bio}</Text>}
+
+      <View style={styles.reviewFormWrapper}>
+        <RequestJobForm tailorId={tailor.id} />
+      </View>
 
       <View style={styles.reviewFormWrapper}>
         <ReviewForm tailorId={tailor.id} onChange={loadData} />

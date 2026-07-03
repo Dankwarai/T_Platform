@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ReviewForm } from "./review-form";
 import { FollowButton } from "./follow-button";
+import { RequestJobForm } from "./request-job-form";
 
 export default async function TailorDetailPage({
   params,
@@ -79,6 +80,8 @@ export default async function TailorDetailPage({
             <p className="mt-2 text-black dark:text-zinc-50">{tailor.bio}</p>
           )}
         </div>
+
+        <RequestJobForm tailorId={id} />
 
         <ReviewForm tailorId={id} />
 
