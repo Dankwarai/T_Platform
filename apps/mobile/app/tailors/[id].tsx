@@ -1,17 +1,23 @@
 import { useCallback, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
+import { FollowButton } from "../../components/FollowButton";
 import { ReviewForm } from "../../components/ReviewForm";
 import { supabase } from "../../lib/supabase";
 
 type Tailor = {
   id: string;
+  user_id: string;
   business_name: string;
   bio: string | null;
   location: string;
   years_experience: number | null;
   avg_rating: number;
   rating_count: number;
+  follower_count: number;
+  // Left loosely typed — without generated DB types, PostgREST's embedded
+  // resource shape (one-to-one vs one-to-many) can't be inferred precisely.
+  tailor_specialties: unknown;
 };
 
 type Review = {
@@ -33,7 +39,7 @@ export default function TailorDetailScreen() {
       supabase
         .from("tailor_profiles")
         .select(
-          "id, business_name, bio, location, years_experience, avg_rating, rating_count",
+          "id, user_id, business_name, bio, location, years_experience, avg_rating, rating_count, follower_count, tailor_specialties(garment_types(name))",
         )
         .eq("id", id)
         .single(),
@@ -70,9 +76,22 @@ export default function TailorDetailScreen() {
     );
   }
 
+  const specialtyNames = (
+    (tailor.tailor_specialties as { garment_types: unknown }[] | null) ?? []
+  )
+    .map((s) => {
+      const gt = s.garment_types;
+      const name = Array.isArray(gt) ? gt[0]?.name : (gt as { name?: string } | null)?.name;
+      return name as string | undefined;
+    })
+    .filter((name): name is string => Boolean(name));
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>{tailor.business_name}</Text>
+      <View style={styles.titleRow}>
+        <Text style={styles.title}>{tailor.business_name}</Text>
+        <FollowButton tailorUserId={tailor.user_id} onChange={loadData} />
+      </View>
       <Text style={styles.meta}>
         {tailor.location}
         {tailor.years_experience
@@ -83,7 +102,14 @@ export default function TailorDetailScreen() {
         {tailor.rating_count > 0
           ? `★ ${tailor.avg_rating.toFixed(1)} (${tailor.rating_count} review${tailor.rating_count === 1 ? "" : "s"})`
           : "No reviews yet"}
+        {" · "}
+        {tailor.follower_count} follower{tailor.follower_count === 1 ? "" : "s"}
       </Text>
+      {specialtyNames.length > 0 && (
+        <Text style={styles.meta}>
+          Specialties: {specialtyNames.join(", ")}
+        </Text>
+      )}
       {tailor.bio && <Text style={styles.bio}>{tailor.bio}</Text>}
 
       <View style={styles.reviewFormWrapper}>
@@ -116,6 +142,11 @@ const styles = StyleSheet.create({
     padding: 24,
     gap: 8,
     backgroundColor: "#fff",
+  },
+  titleRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   title: {
     fontSize: 22,

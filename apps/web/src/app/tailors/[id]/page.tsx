@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ReviewForm } from "./review-form";
+import { FollowButton } from "./follow-button";
 
 export default async function TailorDetailPage({
   params,
@@ -14,7 +15,7 @@ export default async function TailorDetailPage({
   const { data: tailor } = await supabase
     .from("tailor_profiles")
     .select(
-      "id, business_name, bio, location, years_experience, avg_rating, rating_count",
+      "id, user_id, business_name, bio, location, years_experience, avg_rating, rating_count, follower_count, tailor_specialties(garment_types(name))",
     )
     .eq("id", id)
     .single();
@@ -22,6 +23,14 @@ export default async function TailorDetailPage({
   if (!tailor) {
     notFound();
   }
+
+  const specialtyNames = (
+    (tailor.tailor_specialties as unknown as {
+      garment_types: { name: string } | null;
+    }[]) ?? []
+  )
+    .map((s) => s.garment_types?.name)
+    .filter(Boolean);
 
   const { data: reviews } = await supabase
     .from("reviews")
@@ -41,9 +50,12 @@ export default async function TailorDetailPage({
         </Link>
 
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-semibold text-black dark:text-zinc-50">
-            {tailor.business_name}
-          </h1>
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-semibold text-black dark:text-zinc-50">
+              {tailor.business_name}
+            </h1>
+            <FollowButton tailorUserId={tailor.user_id} />
+          </div>
           <p className="text-zinc-600 dark:text-zinc-400">
             {tailor.location}
             {tailor.years_experience
@@ -54,7 +66,15 @@ export default async function TailorDetailPage({
             {tailor.rating_count > 0
               ? `★ ${tailor.avg_rating.toFixed(1)} (${tailor.rating_count} review${tailor.rating_count === 1 ? "" : "s"})`
               : "No reviews yet"}
+            {" · "}
+            {tailor.follower_count} follower
+            {tailor.follower_count === 1 ? "" : "s"}
           </p>
+          {specialtyNames.length > 0 && (
+            <p className="text-sm text-zinc-500">
+              Specialties: {specialtyNames.join(", ")}
+            </p>
+          )}
           {tailor.bio && (
             <p className="mt-2 text-black dark:text-zinc-50">{tailor.bio}</p>
           )}

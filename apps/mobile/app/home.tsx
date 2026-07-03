@@ -65,6 +65,17 @@ export default function HomeScreen() {
         </Pressable>
       )}
 
+      <Pressable style={styles.button} onPress={() => router.push("/rankings")}>
+        <Text style={styles.buttonText}>Top tailors</Text>
+      </Pressable>
+
+      <Pressable
+        style={styles.button}
+        onPress={() => router.push("/suggestions")}
+      >
+        <Text style={styles.buttonText}>Suggested tailors</Text>
+      </Pressable>
+
       <Pressable style={styles.button} onPress={handleLogout}>
         <Text style={styles.buttonText}>Log out</Text>
       </Pressable>

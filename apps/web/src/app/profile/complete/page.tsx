@@ -4,12 +4,16 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
+type GarmentType = { id: string; name: string };
+
 export default function CompleteTailorProfilePage() {
   const router = useRouter();
   const [businessName, setBusinessName] = useState("");
   const [location, setLocation] = useState("");
   const [bio, setBio] = useState("");
   const [yearsExperience, setYearsExperience] = useState("");
+  const [garmentTypes, setGarmentTypes] = useState<GarmentType[]>([]);
+  const [specialtyIds, setSpecialtyIds] = useState<Set<string>>(new Set());
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -23,7 +27,7 @@ export default function CompleteTailorProfilePage() {
       }
       const { data } = await supabase
         .from("tailor_profiles")
-        .select("business_name, location, bio, years_experience")
+        .select("id, business_name, location, bio, years_experience")
         .eq("user_id", user.id)
         .single();
 
@@ -32,10 +36,37 @@ export default function CompleteTailorProfilePage() {
         setLocation(data.location ?? "");
         setBio(data.bio ?? "");
         setYearsExperience(data.years_experience?.toString() ?? "");
+
+        const { data: existingSpecialties } = await supabase
+          .from("tailor_specialties")
+          .select("garment_type_id")
+          .eq("tailor_id", data.id);
+        setSpecialtyIds(
+          new Set((existingSpecialties ?? []).map((s) => s.garment_type_id)),
+        );
       }
+
+      const { data: allGarmentTypes } = await supabase
+        .from("garment_types")
+        .select("id, name")
+        .order("name");
+      setGarmentTypes(allGarmentTypes ?? []);
+
       setLoading(false);
     });
   }, [router]);
+
+  function toggleSpecialty(id: string) {
+    setSpecialtyIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -52,7 +83,7 @@ export default function CompleteTailorProfilePage() {
       return;
     }
 
-    const { error } = await supabase
+    const { data: tailorProfile, error } = await supabase
       .from("tailor_profiles")
       .update({
         business_name: businessName,
@@ -60,12 +91,37 @@ export default function CompleteTailorProfilePage() {
         bio: bio || null,
         years_experience: yearsExperience ? Number(yearsExperience) : null,
       })
-      .eq("user_id", user.id);
+      .eq("user_id", user.id)
+      .select("id")
+      .single();
 
-    if (error) {
-      setError(error.message);
+    if (error || !tailorProfile) {
+      setError(error?.message ?? "Failed to save profile.");
       setPending(false);
       return;
+    }
+
+    // Sync specialties: delete-then-insert is simplest and avoids diffing.
+    await supabase
+      .from("tailor_specialties")
+      .delete()
+      .eq("tailor_id", tailorProfile.id);
+
+    if (specialtyIds.size > 0) {
+      const { error: specialtiesError } = await supabase
+        .from("tailor_specialties")
+        .insert(
+          Array.from(specialtyIds).map((garmentTypeId) => ({
+            tailor_id: tailorProfile.id,
+            garment_type_id: garmentTypeId,
+          })),
+        );
+
+      if (specialtiesError) {
+        setError(specialtiesError.message);
+        setPending(false);
+        return;
+      }
     }
 
     router.push("/dashboard");
@@ -135,6 +191,30 @@ export default function CompleteTailorProfilePage() {
             className="rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
           />
         </label>
+
+        <div className="flex flex-col gap-2 text-sm text-zinc-700 dark:text-zinc-300">
+          Specialties
+          <div className="flex flex-wrap gap-2">
+            {garmentTypes.map((gt) => (
+              <label
+                key={gt.id}
+                className={
+                  specialtyIds.has(gt.id)
+                    ? "flex items-center gap-2 rounded-full border border-black bg-zinc-100 px-3 py-1 dark:border-white dark:bg-zinc-900"
+                    : "flex items-center gap-2 rounded-full border border-black/[.08] px-3 py-1 dark:border-white/[.145]"
+                }
+              >
+                <input
+                  type="checkbox"
+                  checked={specialtyIds.has(gt.id)}
+                  onChange={() => toggleSpecialty(gt.id)}
+                  className="sr-only"
+                />
+                {gt.name}
+              </label>
+            ))}
+          </div>
+        </div>
 
         {error && <p className="text-sm text-red-600">{error}</p>}
 
