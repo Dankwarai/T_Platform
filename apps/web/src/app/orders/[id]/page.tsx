@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { PayButton } from "@/components/PayButton";
 
 type Order = {
   id: string;
@@ -157,6 +158,16 @@ export default function OrderDetailPage() {
           {" · "}
           {order.payment_status}
         </p>
+
+        {isBuyer && (
+          <PayButton
+            targetType="order"
+            targetId={order.id}
+            paymentMethod={order.payment_method}
+            paymentStatus={order.payment_status}
+            onPaid={load}
+          />
+        )}
 
         <ul className="flex flex-col gap-2">
           {items.map((item) => (

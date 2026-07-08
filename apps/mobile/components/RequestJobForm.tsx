@@ -15,6 +15,9 @@ export function RequestJobForm({ tailorId }: { tailorId: string }) {
   const [visible, setVisible] = useState(false);
   const [records, setRecords] = useState<MeasurementRecordOption[]>([]);
   const [recordId, setRecordId] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<"in_app" | "offline">(
+    "offline",
+  );
   const [standardPrice, setStandardPrice] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -89,6 +92,7 @@ export function RequestJobForm({ tailorId }: { tailorId: string }) {
       measurement_record_id: record.id,
       tailor_id: tailorId,
       garment_type_id: record.garment_type_id,
+      payment_method: paymentMethod,
     });
 
     if (insertError) {
@@ -150,6 +154,21 @@ export function RequestJobForm({ tailorId }: { tailorId: string }) {
         </Text>
       )}
 
+      <View style={styles.optionRow}>
+        <Pressable
+          style={styles.radioRow}
+          onPress={() => setPaymentMethod("offline")}
+        >
+          <Text>{paymentMethod === "offline" ? "◉" : "○"} Pay offline</Text>
+        </Pressable>
+        <Pressable
+          style={styles.radioRow}
+          onPress={() => setPaymentMethod("in_app")}
+        >
+          <Text>{paymentMethod === "in_app" ? "◉" : "○"} Pay in-app</Text>
+        </Pressable>
+      </View>
+
       {error && <Text style={styles.error}>{error}</Text>}
 
       <Pressable
@@ -192,6 +211,13 @@ const styles = StyleSheet.create({
   hint: {
     color: "#666",
     fontSize: 13,
+  },
+  optionRow: {
+    flexDirection: "row",
+    gap: 16,
+  },
+  radioRow: {
+    paddingVertical: 2,
   },
   success: {
     color: "#16a34a",

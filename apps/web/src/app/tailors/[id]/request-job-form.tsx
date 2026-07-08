@@ -17,6 +17,9 @@ export function RequestJobForm({ tailorId }: { tailorId: string }) {
   const [records, setRecords] = useState<MeasurementRecordOption[]>([]);
   const [recordId, setRecordId] = useState("");
   const [dueDate, setDueDate] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<"in_app" | "offline">(
+    "offline",
+  );
   const [standardPrice, setStandardPrice] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -105,6 +108,7 @@ export function RequestJobForm({ tailorId }: { tailorId: string }) {
       tailor_id: tailorId,
       garment_type_id: record.garment_type_id,
       due_date: dueDate || null,
+      payment_method: paymentMethod,
     });
 
     if (insertError) {
@@ -185,6 +189,25 @@ export function RequestJobForm({ tailorId }: { tailorId: string }) {
           className="rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
         />
       </label>
+
+      <fieldset className="flex gap-4 text-sm text-zinc-700 dark:text-zinc-300">
+        <label className="flex items-center gap-2">
+          <input
+            type="radio"
+            checked={paymentMethod === "offline"}
+            onChange={() => setPaymentMethod("offline")}
+          />
+          Pay offline
+        </label>
+        <label className="flex items-center gap-2">
+          <input
+            type="radio"
+            checked={paymentMethod === "in_app"}
+            onChange={() => setPaymentMethod("in_app")}
+          />
+          Pay in-app
+        </label>
+      </fieldset>
 
       {error && <p className="text-sm text-red-600">{error}</p>}
 

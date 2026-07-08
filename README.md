@@ -40,3 +40,20 @@ Once a real Supabase project exists, link and push to it:
 npx supabase link --project-ref <project-ref>
 npx supabase db push
 ```
+
+### In-app payments (Paystack)
+
+Job and marketplace order payments marked `in_app` go through Paystack's
+hosted checkout, via two edge functions in `supabase/functions/`:
+`initialize-payment` (starts a checkout session) and `paystack-webhook`
+(marks a job/order paid once Paystack confirms the charge).
+
+```bash
+cp supabase/functions/.env.example supabase/functions/.env   # add your Paystack test secret key
+npx supabase functions serve   # required for in-app payments to work locally
+```
+
+Paystack can't reach `localhost` directly for webhooks — use a tunnel
+(e.g. `ngrok http 54321`) and set the tunnel URL + `/functions/v1/paystack-webhook`
+as the webhook URL in the Paystack test-mode dashboard to test a full
+round trip locally.

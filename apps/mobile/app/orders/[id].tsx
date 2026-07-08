@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Link, useLocalSearchParams } from "expo-router";
 import { useAuth } from "../../contexts/auth-context";
+import { PayButton } from "../../components/PayButton";
 import { supabase } from "../../lib/supabase";
 
 type Order = {
@@ -138,6 +139,16 @@ export default function OrderDetailScreen() {
         {" · "}
         {order.payment_status}
       </Text>
+
+      {isBuyer && (
+        <PayButton
+          targetType="order"
+          targetId={order.id}
+          paymentMethod={order.payment_method}
+          paymentStatus={order.payment_status}
+          onPaid={load}
+        />
+      )}
 
       {items.map((item) => (
         <View key={item.id} style={styles.itemRow}>

@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { PayButton } from "@/components/PayButton";
 
 type Job = {
   id: string;
@@ -10,6 +11,7 @@ type Job = {
   price: number | null;
   price_type: string | null;
   payment_status: string;
+  payment_method: string | null;
   due_date: string | null;
   fitting_iteration_count: number;
   fit_confirmation: string | null;
@@ -73,7 +75,7 @@ export default function JobDetailPage() {
     const { data: jobData } = await supabase
       .from("jobs")
       .select(
-        "id, status, price, price_type, payment_status, due_date, fitting_iteration_count, fit_confirmation, tailor_id, garment_type_id, tailor_profiles(user_id, business_name), garment_types(name), measurement_records(label, customer_id, customer_profiles(user_id, users(full_name)))",
+        "id, status, price, price_type, payment_status, payment_method, due_date, fitting_iteration_count, fit_confirmation, tailor_id, garment_type_id, tailor_profiles(user_id, business_name), garment_types(name), measurement_records(label, customer_id, customer_profiles(user_id, users(full_name)))",
       )
       .eq("id", id)
       .single();
@@ -193,6 +195,15 @@ export default function JobDetailPage() {
           <p className="text-zinc-600 dark:text-zinc-400">
             Price: {job.price} ({job.price_type}) · {job.payment_status}
           </p>
+        )}
+        {isCustomer && (
+          <PayButton
+            targetType="job"
+            targetId={job.id}
+            paymentMethod={job.payment_method}
+            paymentStatus={job.payment_status}
+            onPaid={load}
+          />
         )}
         {job.fitting_iteration_count > 0 && (
           <p className="text-sm text-zinc-500">
