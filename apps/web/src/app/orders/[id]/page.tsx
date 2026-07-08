@@ -13,6 +13,7 @@ type Order = {
   payment_method: string;
   payment_status: string;
   total_amount: number;
+  platform_fee_amount: number;
   buyer_id: string;
   supplier_id: string;
   supplier_profiles: { user_id: string; business_name: string } | null;
@@ -64,7 +65,7 @@ export default function OrderDetailPage() {
     const { data: orderData } = await supabase
       .from("orders")
       .select(
-        "id, status, fulfillment_type, payment_method, payment_status, total_amount, buyer_id, supplier_id, supplier_profiles(user_id, business_name)",
+        "id, status, fulfillment_type, payment_method, payment_status, total_amount, platform_fee_amount, buyer_id, supplier_id, supplier_profiles(user_id, business_name)",
       )
       .eq("id", id)
       .single();
@@ -193,6 +194,13 @@ export default function OrderDetailPage() {
         <p className="text-right font-medium text-black dark:text-zinc-50">
           Total: {order.total_amount}
         </p>
+
+        {isSupplier && (
+          <p className="text-right text-sm text-zinc-500">
+            Platform fee (10%): -{order.platform_fee_amount} · You keep:{" "}
+            {(order.total_amount - order.platform_fee_amount).toFixed(2)}
+          </p>
+        )}
 
         {error && <p className="text-sm text-red-600">{error}</p>}
 

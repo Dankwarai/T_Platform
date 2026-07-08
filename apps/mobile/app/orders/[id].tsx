@@ -12,6 +12,7 @@ type Order = {
   payment_method: string;
   payment_status: string;
   total_amount: number;
+  platform_fee_amount: number;
   buyer_id: string;
   supplier_id: string;
   supplier_profiles: { user_id: string; business_name: string } | null;
@@ -54,7 +55,7 @@ export default function OrderDetailScreen() {
     const { data: orderData } = await supabase
       .from("orders")
       .select(
-        "id, status, fulfillment_type, payment_method, payment_status, total_amount, buyer_id, supplier_id, supplier_profiles(user_id, business_name)",
+        "id, status, fulfillment_type, payment_method, payment_status, total_amount, platform_fee_amount, buyer_id, supplier_id, supplier_profiles(user_id, business_name)",
       )
       .eq("id", id)
       .single();
@@ -168,6 +169,13 @@ export default function OrderDetailScreen() {
 
       <Text style={styles.total}>Total: {order.total_amount}</Text>
 
+      {isSupplier && (
+        <Text style={styles.feeNote}>
+          Platform fee (10%): -{order.platform_fee_amount} · You keep:{" "}
+          {(order.total_amount - order.platform_fee_amount).toFixed(2)}
+        </Text>
+      )}
+
       {error && <Text style={styles.error}>{error}</Text>}
 
       <View style={styles.buttonRow}>
@@ -249,6 +257,11 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontWeight: "600",
     marginTop: 8,
+  },
+  feeNote: {
+    textAlign: "right",
+    color: "#666",
+    fontSize: 13,
   },
   error: {
     color: "#dc2626",
