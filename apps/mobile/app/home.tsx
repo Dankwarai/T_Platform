@@ -35,6 +35,20 @@ export default function HomeScreen() {
       });
   }, [user, profile, router]);
 
+  useEffect(() => {
+    if (!user || profile?.role !== "supplier") return;
+    supabase
+      .from("supplier_profiles")
+      .select("business_name")
+      .eq("user_id", user.id)
+      .single()
+      .then(({ data }) => {
+        if (data?.business_name === "") {
+          router.replace("/supplier/profile");
+        }
+      });
+  }, [user, profile, router]);
+
   async function handleLogout() {
     await supabase.auth.signOut();
     // app/_layout.tsx's auth state listener redirects to /login.
@@ -87,6 +101,25 @@ export default function HomeScreen() {
         onPress={() => router.push("/suggestions")}
       >
         <Text style={styles.buttonText}>Suggested tailors</Text>
+      </Pressable>
+
+      <Pressable style={styles.button} onPress={() => router.push("/products")}>
+        <Text style={styles.buttonText}>Browse marketplace</Text>
+      </Pressable>
+
+      {profile?.role === "supplier" && (
+        <Pressable
+          style={styles.button}
+          onPress={() => router.push("/supplier/products")}
+        >
+          <Text style={styles.buttonText}>My products</Text>
+        </Pressable>
+      )}
+
+      <Pressable style={styles.button} onPress={() => router.push("/orders")}>
+        <Text style={styles.buttonText}>
+          {profile?.role === "supplier" ? "Orders received" : "My orders"}
+        </Text>
       </Pressable>
 
       <Pressable style={styles.button} onPress={handleLogout}>

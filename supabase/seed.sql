@@ -1,4 +1,5 @@
--- Seed reference data for local dev: garment types + their measurement fields.
+-- Seed reference data for local dev: garment types + their measurement
+-- fields, plus Phase 3 product categories.
 
 insert into public.garment_types (id, name, description) values
   ('11111111-1111-1111-1111-111111111111', 'Shirt', 'Dress shirts, casual shirts'),
@@ -18,3 +19,10 @@ insert into public.measurement_fields (garment_type_id, field_key, field_label, 
   ('33333333-3333-3333-3333-333333333333', 'waist', 'Waist', 2, 'Measure around the natural waistline.'),
   ('33333333-3333-3333-3333-333333333333', 'hip', 'Hip', 3, 'Measure around the fullest part of the hips.'),
   ('33333333-3333-3333-3333-333333333333', 'dress_length', 'Dress Length', 4, 'Measure from the shoulder to the desired hemline.');
+
+insert into public.product_categories (id, name) values
+  ('44444444-4444-4444-4444-444444444444', 'Fabric'),
+  ('55555555-5555-5555-5555-555555555555', 'Buttons'),
+  ('66666666-6666-6666-6666-666666666666', 'Thread'),
+  ('77777777-7777-7777-7777-777777777777', 'Tools'),
+  ('88888888-8888-8888-8888-888888888888', 'Trims');

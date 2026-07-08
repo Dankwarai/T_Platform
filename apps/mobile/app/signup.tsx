@@ -54,6 +54,12 @@ export default function SignupScreen() {
         >
           <Text>Tailor</Text>
         </Pressable>
+        <Pressable
+          style={[styles.roleOption, role === "supplier" && styles.roleSelected]}
+          onPress={() => setRole("supplier")}
+        >
+          <Text>Supplier</Text>
+        </Pressable>
       </View>
 
       <TextInput

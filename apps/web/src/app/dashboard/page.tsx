@@ -32,6 +32,18 @@ export default async function DashboardPage() {
     }
   }
 
+  if (profile?.role === "supplier") {
+    const { data: supplierProfile } = await supabase
+      .from("supplier_profiles")
+      .select("business_name")
+      .eq("user_id", user.id)
+      .single();
+
+    if (supplierProfile?.business_name === "") {
+      redirect("/supplier/profile");
+    }
+  }
+
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-6 bg-zinc-50 px-6 dark:bg-black">
       <div className="flex w-full max-w-sm flex-col gap-2 text-center">
@@ -81,6 +93,26 @@ export default async function DashboardPage() {
         className="h-11 rounded-full border border-solid border-black/[.08] px-5 leading-[44px] transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
       >
         Suggested tailors
+      </Link>
+      <Link
+        href="/products"
+        className="h-11 rounded-full border border-solid border-black/[.08] px-5 leading-[44px] transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
+      >
+        Browse marketplace
+      </Link>
+      {profile?.role === "supplier" && (
+        <Link
+          href="/supplier/products"
+          className="h-11 rounded-full border border-solid border-black/[.08] px-5 leading-[44px] transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
+        >
+          My products
+        </Link>
+      )}
+      <Link
+        href="/orders"
+        className="h-11 rounded-full border border-solid border-black/[.08] px-5 leading-[44px] transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
+      >
+        {profile?.role === "supplier" ? "Orders received" : "My orders"}
       </Link>
       <LogoutButton />
     </div>

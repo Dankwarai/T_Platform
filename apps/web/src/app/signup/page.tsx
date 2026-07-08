@@ -70,6 +70,16 @@ export default function SignupPage() {
             />
             Tailor
           </label>
+          <label className="flex items-center gap-2">
+            <input
+              type="radio"
+              name="role"
+              value="supplier"
+              checked={role === "supplier"}
+              onChange={() => setRole("supplier")}
+            />
+            Supplier
+          </label>
         </fieldset>
 
         <label className="flex flex-col gap-1 text-sm text-zinc-700 dark:text-zinc-300">
