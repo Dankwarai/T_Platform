@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-export function FollowButton({ tailorUserId }: { tailorUserId: string }) {
+export function FollowButton({ followeeUserId }: { followeeUserId: string }) {
   const router = useRouter();
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -18,7 +18,7 @@ export function FollowButton({ tailorUserId }: { tailorUserId: string }) {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user || user.id === tailorUserId) {
+      if (!user || user.id === followeeUserId) {
         setLoading(false);
         return;
       }
@@ -28,13 +28,13 @@ export function FollowButton({ tailorUserId }: { tailorUserId: string }) {
         .from("follows")
         .select("id")
         .eq("follower_id", user.id)
-        .eq("followee_id", tailorUserId)
+        .eq("followee_id", followeeUserId)
         .maybeSingle();
 
       setIsFollowing(!!data);
       setLoading(false);
     })();
-  }, [tailorUserId]);
+  }, [followeeUserId]);
 
   async function toggleFollow() {
     if (!currentUserId) return;
@@ -46,12 +46,12 @@ export function FollowButton({ tailorUserId }: { tailorUserId: string }) {
         .from("follows")
         .delete()
         .eq("follower_id", currentUserId)
-        .eq("followee_id", tailorUserId);
+        .eq("followee_id", followeeUserId);
       if (!error) setIsFollowing(false);
     } else {
       const { error } = await supabase
         .from("follows")
-        .insert({ follower_id: currentUserId, followee_id: tailorUserId });
+        .insert({ follower_id: currentUserId, followee_id: followeeUserId });
       if (!error) setIsFollowing(true);
     }
 

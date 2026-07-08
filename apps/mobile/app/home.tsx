@@ -107,6 +107,10 @@ export default function HomeScreen() {
         <Text style={styles.buttonText}>Browse marketplace</Text>
       </Pressable>
 
+      <Pressable style={styles.button} onPress={() => router.push("/suppliers")}>
+        <Text style={styles.buttonText}>Find suppliers</Text>
+      </Pressable>
+
       {profile?.role === "supplier" && (
         <Pressable
           style={styles.button}

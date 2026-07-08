@@ -95,7 +95,7 @@ export default function TailorDetailScreen() {
         <Text style={styles.title}>{tailor.business_name}</Text>
         <View style={styles.titleActions}>
           <SkillBadge tier={tailor.skill_tier} />
-          <FollowButton tailorUserId={tailor.user_id} onChange={loadData} />
+          <FollowButton followeeUserId={tailor.user_id} onChange={loadData} />
         </View>
       </View>
       <Text style={styles.meta}>

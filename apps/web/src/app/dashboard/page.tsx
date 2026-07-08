@@ -100,6 +100,12 @@ export default async function DashboardPage() {
       >
         Browse marketplace
       </Link>
+      <Link
+        href="/suppliers"
+        className="h-11 rounded-full border border-solid border-black/[.08] px-5 leading-[44px] transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
+      >
+        Find suppliers
+      </Link>
       {profile?.role === "supplier" && (
         <Link
           href="/supplier/products"

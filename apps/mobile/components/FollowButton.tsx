@@ -3,10 +3,10 @@ import { Pressable, StyleSheet, Text } from "react-native";
 import { supabase } from "../lib/supabase";
 
 export function FollowButton({
-  tailorUserId,
+  followeeUserId,
   onChange,
 }: {
-  tailorUserId: string;
+  followeeUserId: string;
   onChange: () => void;
 }) {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
@@ -19,7 +19,7 @@ export function FollowButton({
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user || user.id === tailorUserId) {
+      if (!user || user.id === followeeUserId) {
         setLoading(false);
         return;
       }
@@ -29,13 +29,13 @@ export function FollowButton({
         .from("follows")
         .select("id")
         .eq("follower_id", user.id)
-        .eq("followee_id", tailorUserId)
+        .eq("followee_id", followeeUserId)
         .maybeSingle();
 
       setIsFollowing(!!data);
       setLoading(false);
     })();
-  }, [tailorUserId]);
+  }, [followeeUserId]);
 
   async function toggleFollow() {
     if (!currentUserId) return;
@@ -46,12 +46,12 @@ export function FollowButton({
         .from("follows")
         .delete()
         .eq("follower_id", currentUserId)
-        .eq("followee_id", tailorUserId);
+        .eq("followee_id", followeeUserId);
       if (!error) setIsFollowing(false);
     } else {
       const { error } = await supabase
         .from("follows")
-        .insert({ follower_id: currentUserId, followee_id: tailorUserId });
+        .insert({ follower_id: currentUserId, followee_id: followeeUserId });
       if (!error) setIsFollowing(true);
     }
 

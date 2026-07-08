@@ -2,9 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { ReviewForm } from "./review-form";
-import { FollowButton } from "./follow-button";
 import { RequestJobForm } from "./request-job-form";
 import { SkillBadge } from "@/components/SkillBadge";
+import { FollowButton } from "@/components/FollowButton";
 
 export default async function TailorDetailPage({
   params,
@@ -58,7 +58,7 @@ export default async function TailorDetailPage({
             </h1>
             <div className="flex items-center gap-2">
               <SkillBadge tier={tailor.skill_tier} />
-              <FollowButton tailorUserId={tailor.user_id} />
+              <FollowButton followeeUserId={tailor.user_id} />
             </div>
           </div>
           <p className="text-zinc-600 dark:text-zinc-400">
