@@ -4,6 +4,7 @@ import { useLocalSearchParams } from "expo-router";
 import { FollowButton } from "../../components/FollowButton";
 import { RequestJobForm } from "../../components/RequestJobForm";
 import { ReviewForm } from "../../components/ReviewForm";
+import { SkillBadge } from "../../components/SkillBadge";
 import { supabase } from "../../lib/supabase";
 
 type Tailor = {
@@ -16,6 +17,7 @@ type Tailor = {
   avg_rating: number;
   rating_count: number;
   follower_count: number;
+  skill_tier: string;
   // Left loosely typed — without generated DB types, PostgREST's embedded
   // resource shape (one-to-one vs one-to-many) can't be inferred precisely.
   tailor_specialties: unknown;
@@ -40,7 +42,7 @@ export default function TailorDetailScreen() {
       supabase
         .from("tailor_profiles")
         .select(
-          "id, user_id, business_name, bio, location, years_experience, avg_rating, rating_count, follower_count, tailor_specialties(garment_types(name))",
+          "id, user_id, business_name, bio, location, years_experience, avg_rating, rating_count, follower_count, skill_tier, tailor_specialties(garment_types(name))",
         )
         .eq("id", id)
         .single(),
@@ -91,7 +93,10 @@ export default function TailorDetailScreen() {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.titleRow}>
         <Text style={styles.title}>{tailor.business_name}</Text>
-        <FollowButton tailorUserId={tailor.user_id} onChange={loadData} />
+        <View style={styles.titleActions}>
+          <SkillBadge tier={tailor.skill_tier} />
+          <FollowButton tailorUserId={tailor.user_id} onChange={loadData} />
+        </View>
       </View>
       <Text style={styles.meta}>
         {tailor.location}
@@ -152,6 +157,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  titleActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
   },
   title: {
     fontSize: 22,

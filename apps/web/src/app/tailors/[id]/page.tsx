@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ReviewForm } from "./review-form";
 import { FollowButton } from "./follow-button";
 import { RequestJobForm } from "./request-job-form";
+import { SkillBadge } from "@/components/SkillBadge";
 
 export default async function TailorDetailPage({
   params,
@@ -16,7 +17,7 @@ export default async function TailorDetailPage({
   const { data: tailor } = await supabase
     .from("tailor_profiles")
     .select(
-      "id, user_id, business_name, bio, location, years_experience, avg_rating, rating_count, follower_count, tailor_specialties(garment_types(name))",
+      "id, user_id, business_name, bio, location, years_experience, avg_rating, rating_count, follower_count, skill_score, skill_tier, tailor_specialties(garment_types(name))",
     )
     .eq("id", id)
     .single();
@@ -55,7 +56,10 @@ export default async function TailorDetailPage({
             <h1 className="text-2xl font-semibold text-black dark:text-zinc-50">
               {tailor.business_name}
             </h1>
-            <FollowButton tailorUserId={tailor.user_id} />
+            <div className="flex items-center gap-2">
+              <SkillBadge tier={tailor.skill_tier} />
+              <FollowButton tailorUserId={tailor.user_id} />
+            </div>
           </div>
           <p className="text-zinc-600 dark:text-zinc-400">
             {tailor.location}

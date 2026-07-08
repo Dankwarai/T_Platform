@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 import { useRouter } from "expo-router";
+import { SkillBadge } from "../../components/SkillBadge";
 import { supabase } from "../../lib/supabase";
 
 type TailorResult = {
@@ -18,6 +19,7 @@ type TailorResult = {
   years_experience: number | null;
   avg_rating: number;
   rating_count: number;
+  skill_tier: string;
 };
 
 const RATING_FILTERS = [0, 3, 4, 4.5];
@@ -37,7 +39,7 @@ export default function TailorsScreen() {
       let query = supabase
         .from("tailor_profiles")
         .select(
-          "id, business_name, bio, location, years_experience, avg_rating, rating_count",
+          "id, business_name, bio, location, years_experience, avg_rating, rating_count, skill_tier",
         )
         .neq("business_name", "")
         .order("avg_rating", { ascending: false });
@@ -100,7 +102,10 @@ export default function TailorsScreen() {
               onPress={() => router.push(`/tailors/${item.id}`)}
             >
               <View style={styles.cardHeader}>
-                <Text style={styles.cardTitle}>{item.business_name}</Text>
+                <View style={styles.cardTitleRow}>
+                  <Text style={styles.cardTitle}>{item.business_name}</Text>
+                  <SkillBadge tier={item.skill_tier} />
+                </View>
                 <Text style={styles.cardMeta}>
                   {item.rating_count > 0
                     ? `★ ${item.avg_rating.toFixed(1)} (${item.rating_count})`
@@ -168,6 +173,11 @@ const styles = StyleSheet.create({
   cardHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  cardTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
   },
   cardTitle: {
     fontWeight: "600",

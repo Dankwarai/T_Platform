@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { SkillBadge } from "@/components/SkillBadge";
 
 type TailorResult = {
   id: string;
@@ -12,6 +13,7 @@ type TailorResult = {
   years_experience: number | null;
   avg_rating: number;
   rating_count: number;
+  skill_tier: string;
 };
 
 export default function TailorsPage() {
@@ -29,7 +31,7 @@ export default function TailorsPage() {
       let query = supabase
         .from("tailor_profiles")
         .select(
-          "id, business_name, bio, location, years_experience, avg_rating, rating_count",
+          "id, business_name, bio, location, years_experience, avg_rating, rating_count, skill_tier",
         )
         .neq("business_name", "")
         .order("avg_rating", { ascending: false });
@@ -95,8 +97,9 @@ export default function TailorsPage() {
                   className="flex flex-col gap-1 rounded-md border border-black/[.08] bg-white p-4 transition-colors hover:bg-black/[.02] dark:border-white/[.145] dark:bg-black dark:hover:bg-white/[.03]"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium text-black dark:text-zinc-50">
+                    <span className="flex items-center gap-2 font-medium text-black dark:text-zinc-50">
                       {tailor.business_name}
+                      <SkillBadge tier={tailor.skill_tier} />
                     </span>
                     <span className="text-sm text-zinc-600 dark:text-zinc-400">
                       {tailor.rating_count > 0

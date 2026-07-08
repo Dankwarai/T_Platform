@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 import { useRouter } from "expo-router";
+import { SkillBadge } from "../components/SkillBadge";
 import { supabase } from "../lib/supabase";
 
 type GarmentType = { id: string; name: string };
@@ -18,6 +19,7 @@ type RankedTailor = {
   avg_rating: number;
   rating_count: number;
   follower_count: number;
+  skill_tier: string;
 };
 
 export default function RankingsScreen() {
@@ -44,13 +46,13 @@ export default function RankingsScreen() {
         ? supabase
             .from("tailor_profiles")
             .select(
-              "id, business_name, location, avg_rating, rating_count, follower_count, tailor_specialties!inner(garment_type_id)",
+              "id, business_name, location, avg_rating, rating_count, follower_count, skill_tier, tailor_specialties!inner(garment_type_id)",
             )
             .eq("tailor_specialties.garment_type_id", specialtyId)
         : supabase
             .from("tailor_profiles")
             .select(
-              "id, business_name, location, avg_rating, rating_count, follower_count",
+              "id, business_name, location, avg_rating, rating_count, follower_count, skill_tier",
             );
 
       query = query
@@ -116,7 +118,10 @@ export default function RankingsScreen() {
             >
               <Text style={styles.rank}>{index + 1}</Text>
               <View style={styles.cardBody}>
-                <Text style={styles.cardTitle}>{item.business_name}</Text>
+                <View style={styles.cardTitleRow}>
+                  <Text style={styles.cardTitle}>{item.business_name}</Text>
+                  <SkillBadge tier={item.skill_tier} />
+                </View>
                 <Text style={styles.cardMeta}>
                   {item.location}
                   {item.rating_count > 0
@@ -190,6 +195,11 @@ const styles = StyleSheet.create({
   },
   cardBody: {
     flex: 1,
+  },
+  cardTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
   },
   cardTitle: {
     fontWeight: "600",

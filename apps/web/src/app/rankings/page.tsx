@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { SkillBadge } from "@/components/SkillBadge";
 
 type GarmentType = { id: string; name: string };
 type RankedTailor = {
@@ -12,6 +13,7 @@ type RankedTailor = {
   avg_rating: number;
   rating_count: number;
   follower_count: number;
+  skill_tier: string;
 };
 
 export default function RankingsPage() {
@@ -39,13 +41,13 @@ export default function RankingsPage() {
         ? supabase
             .from("tailor_profiles")
             .select(
-              "id, business_name, location, avg_rating, rating_count, follower_count, tailor_specialties!inner(garment_type_id)",
+              "id, business_name, location, avg_rating, rating_count, follower_count, skill_tier, tailor_specialties!inner(garment_type_id)",
             )
             .eq("tailor_specialties.garment_type_id", specialtyId)
         : supabase
             .from("tailor_profiles")
             .select(
-              "id, business_name, location, avg_rating, rating_count, follower_count",
+              "id, business_name, location, avg_rating, rating_count, follower_count, skill_tier",
             );
 
       query = query
@@ -109,8 +111,9 @@ export default function RankingsPage() {
                     {i + 1}
                   </span>
                   <div className="flex flex-1 flex-col">
-                    <span className="font-medium text-black dark:text-zinc-50">
+                    <span className="flex items-center gap-2 font-medium text-black dark:text-zinc-50">
                       {tailor.business_name}
+                      <SkillBadge tier={tailor.skill_tier} />
                     </span>
                     <span className="text-sm text-zinc-600 dark:text-zinc-400">
                       {tailor.location}
