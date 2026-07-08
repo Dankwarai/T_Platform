@@ -35,6 +35,14 @@ type HistoryEntry = {
   created_at: string;
 };
 
+// CONCEPT.md flagged unlimited fitting_iteration_count as a risk of
+// stalling a job indefinitely. Once this many adjustment rounds have
+// happened, the next fitting outcome finalizes the job instead of
+// looping back to another round — a poor fit_confirmation still drags
+// down the tailor's skill score, so the incentive to get it right within
+// the cap stays intact.
+const FITTING_ADJUSTMENT_CAP = 3;
+
 const STATUS_LABELS: Record<string, string> = {
   requested: "Requested",
   accepted: "Accepted",
@@ -140,7 +148,8 @@ export default function JobDetailPage() {
 
   async function handleFitConfirmation(value: "yes" | "somewhat" | "no") {
     if (!job) return;
-    if (value === "yes") {
+    const cappedOut = job.fitting_iteration_count >= FITTING_ADJUSTMENT_CAP;
+    if (value === "yes" || cappedOut) {
       await updateJob({
         status: "completed",
         fit_confirmation: value,
@@ -316,6 +325,12 @@ export default function JobDetailPage() {
             <h3 className="font-medium text-black dark:text-zinc-50">
               How did the fitting go?
             </h3>
+            {job.fitting_iteration_count >= FITTING_ADJUSTMENT_CAP && (
+              <p className="text-sm text-zinc-500">
+                Adjustment limit reached — any response now will mark this
+                job completed.
+              </p>
+            )}
             <div className="flex gap-2">
               <button
                 disabled={pending}
