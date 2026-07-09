@@ -48,6 +48,15 @@ export function PayButton({
     return null;
   }
 
+  // Jobs pay in two legs (50% deposit, then the remainder); orders are a
+  // single full payment, they never reach "deposit_paid".
+  const payLabel =
+    targetType === "job"
+      ? paymentStatus === "deposit_paid"
+        ? "Pay remaining balance"
+        : "Pay deposit (50%)"
+      : "Pay now";
+
   async function handlePay() {
     setPending(true);
     setError(null);
@@ -86,7 +95,7 @@ export function PayButton({
         disabled={pending}
         className="h-10 rounded-full bg-foreground px-5 text-sm text-background transition-colors hover:bg-[#383838] disabled:opacity-50 dark:hover:bg-[#ccc]"
       >
-        {pending ? "Redirecting to checkout..." : "Pay now"}
+        {pending ? "Redirecting to checkout..." : payLabel}
       </button>
     </div>
   );

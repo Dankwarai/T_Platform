@@ -80,9 +80,22 @@ Deno.serve(async (req) => {
 
   if (newStatus === "paid") {
     if (payment.target_type === "job") {
+      // Jobs pay in two legs (deposit, then remainder) — this webhook
+      // fires once per successful charge, so step the job's own status
+      // forward by one stage rather than jumping straight to "paid".
+      // initialize-payment already refuses to start a new charge once
+      // the job is fully paid, so there's no risk of overshooting past it.
+      const { data: job } = await adminClient
+        .from("jobs")
+        .select("payment_status")
+        .eq("id", payment.job_id)
+        .single();
+
+      const nextStatus = job?.payment_status === "deposit_paid" ? "paid" : "deposit_paid";
+
       await adminClient
         .from("jobs")
-        .update({ payment_status: "paid" })
+        .update({ payment_status: nextStatus })
         .eq("id", payment.job_id);
     } else {
       await adminClient

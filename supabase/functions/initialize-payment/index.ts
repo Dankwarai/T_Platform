@@ -99,7 +99,15 @@ Deno.serve(async (req) => {
     if (job.price === null) {
       return json({ error: "This job has no price set yet." }, 400);
     }
-    amount = job.price;
+    // Jobs pay in two legs: a 50% deposit first, then the remainder.
+    // Computing the deposit once and subtracting it for the remainder
+    // (rather than always taking 50% of price) keeps deposit + remainder
+    // exactly equal to price regardless of rounding.
+    const depositAmount = Math.round(job.price * 0.5 * 100) / 100;
+    amount =
+      job.payment_status === "deposit_paid"
+        ? job.price - depositAmount
+        : depositAmount;
   } else {
     const { data: order } = await userClient
       .from("orders")

@@ -25,6 +25,15 @@ export function PayButton({
     return null;
   }
 
+  // Jobs pay in two legs (50% deposit, then the remainder); orders are a
+  // single full payment, they never reach "deposit_paid".
+  const payLabel =
+    targetType === "job"
+      ? paymentStatus === "deposit_paid"
+        ? "Pay remaining balance"
+        : "Pay deposit (50%)"
+      : "Pay now";
+
   async function handlePay() {
     setPending(true);
     setError(null);
@@ -76,7 +85,7 @@ export function PayButton({
         disabled={pending}
       >
         <Text style={styles.buttonText}>
-          {pending ? "Opening checkout..." : "Pay now"}
+          {pending ? "Opening checkout..." : payLabel}
         </Text>
       </Pressable>
     </>

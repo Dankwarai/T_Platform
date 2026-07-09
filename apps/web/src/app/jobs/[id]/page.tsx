@@ -43,6 +43,12 @@ type HistoryEntry = {
 // the cap stays intact.
 const FITTING_ADJUSTMENT_CAP = 3;
 
+const PAYMENT_STATUS_LABELS: Record<string, string> = {
+  pending: "payment pending",
+  deposit_paid: "deposit paid, balance due",
+  paid: "paid",
+};
+
 const STATUS_LABELS: Record<string, string> = {
   requested: "Requested",
   accepted: "Accepted",
@@ -202,7 +208,8 @@ export default function JobDetailPage() {
         </p>
         {job.price !== null && (
           <p className="text-zinc-600 dark:text-zinc-400">
-            Price: {job.price} ({job.price_type}) · {job.payment_status}
+            Price: {job.price} ({job.price_type}) ·{" "}
+            {PAYMENT_STATUS_LABELS[job.payment_status] ?? job.payment_status}
           </p>
         )}
         {isCustomer && (
