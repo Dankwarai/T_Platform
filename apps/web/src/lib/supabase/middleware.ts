@@ -16,7 +16,14 @@ const PROTECTED_PATHS = [
   "/orders",
   "/customer",
 ];
-const AUTH_ONLY_PATHS = ["/login", "/signup"];
+const AUTH_ONLY_PATHS = ["/login", "/signup", "/forgot-password"];
+// /reset-password is deliberately in neither list. By the time it loads, the
+// recovery session cookie is already set (via /auth/confirm, which runs
+// first — see that route), so PROTECTED_PATHS wouldn't even bounce an
+// unauthenticated visitor here in practice. Left unprotected anyway: this
+// page has no sensitive data of its own to gate, and a user who already has
+// an unrelated session elsewhere should still be able to land here and
+// finish resetting the password the recovery link was for.
 
 // Called from proxy.ts on every request: refreshes the auth cookie and
 // does an optimistic redirect based on session presence. This is a fast

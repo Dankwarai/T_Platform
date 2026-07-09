@@ -156,11 +156,18 @@ max_indexes = 5
 enabled = true
 # The base URL of your website. Used as an allow-list for redirects and for constructing URLs used
 # in emails.
-site_url = "http://127.0.0.1:3000"
+site_url = "http://localhost:3000"
 # The public URL that Auth serves on. Defaults to the API external URL with `/auth/v1` appended.
 # external_url = ""
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
-additional_redirect_urls = ["https://127.0.0.1:3000"]
+# GoTrue matches these exactly (no wildcards), so both host forms are listed since `npm run dev`
+# is opened at localhost but curl/scripts in this repo tend to use 127.0.0.1.
+additional_redirect_urls = [
+  "http://localhost:3000",
+  "http://localhost:3000/reset-password",
+  "http://127.0.0.1:3000",
+  "http://127.0.0.1:3000/reset-password",
+]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 (1 week).
 jwt_expiry = 3600
 # JWT issuer URL. If not set, defaults to auth.external_url.
@@ -247,6 +254,17 @@ otp_expiry = 3600
 # [auth.email.template.invite]
 # subject = "You have been invited"
 # content_path = "./supabase/templates/invite.html"
+
+# Overrides the default recovery link (GoTrue's own /auth/v1/verify, which
+# redirects with tokens in a URL hash fragment) with one pointing at our own
+# /auth/confirm route instead. Needed because createBrowserClient forces
+# flowType "pkce", and a PKCE-configured client throws "Not a valid PKCE
+# flow url" on the default hash-fragment redirect — verified locally via
+# Mailpit while building the password-reset flow. token_hash + our own
+# server-side verifyOtp() call is the flowType-agnostic alternative.
+[auth.email.template.recovery]
+subject = "Reset your password"
+content_path = "./supabase/templates/recovery.html"
 
 # Uncomment to customize notification email template
 # [auth.email.notification.password_changed]
