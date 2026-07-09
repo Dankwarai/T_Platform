@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   FlatList,
+  Image,
   Pressable,
   StyleSheet,
   Text,
@@ -10,6 +11,7 @@ import {
 import { useRouter } from "expo-router";
 import { SkillBadge } from "../../components/SkillBadge";
 import { supabase } from "../../lib/supabase";
+import { getStorageImageUrl } from "../../lib/storage-image-url";
 
 type TailorResult = {
   id: string;
@@ -20,6 +22,7 @@ type TailorResult = {
   avg_rating: number;
   rating_count: number;
   skill_tier: string;
+  portfolio_images: string[];
 };
 
 const RATING_FILTERS = [0, 3, 4, 4.5];
@@ -39,7 +42,7 @@ export default function TailorsScreen() {
       let query = supabase
         .from("tailor_profiles")
         .select(
-          "id, business_name, bio, location, years_experience, avg_rating, rating_count, skill_tier",
+          "id, business_name, bio, location, years_experience, avg_rating, rating_count, skill_tier, portfolio_images",
         )
         .neq("business_name", "")
         .order("avg_rating", { ascending: false });
@@ -101,24 +104,39 @@ export default function TailorsScreen() {
               style={styles.card}
               onPress={() => router.push(`/tailors/${item.id}`)}
             >
-              <View style={styles.cardHeader}>
-                <View style={styles.cardTitleRow}>
-                  <Text style={styles.cardTitle}>{item.business_name}</Text>
-                  <SkillBadge tier={item.skill_tier} />
+              <View style={styles.cardRow}>
+                {item.portfolio_images.length > 0 && (
+                  <Image
+                    source={{
+                      uri: getStorageImageUrl(
+                        "tailor-portfolio-images",
+                        item.portfolio_images[0],
+                      ),
+                    }}
+                    style={styles.thumbnail}
+                  />
+                )}
+                <View style={styles.cardBody}>
+                  <View style={styles.cardHeader}>
+                    <View style={styles.cardTitleRow}>
+                      <Text style={styles.cardTitle}>{item.business_name}</Text>
+                      <SkillBadge tier={item.skill_tier} />
+                    </View>
+                    <Text style={styles.cardMeta}>
+                      {item.rating_count > 0
+                        ? `★ ${item.avg_rating.toFixed(1)} (${item.rating_count})`
+                        : "No reviews yet"}
+                    </Text>
+                  </View>
+                  <Text style={styles.cardMeta}>
+                    {item.location}
+                    {item.years_experience
+                      ? ` · ${item.years_experience} yrs experience`
+                      : ""}
+                  </Text>
+                  {item.bio && <Text style={styles.cardBio}>{item.bio}</Text>}
                 </View>
-                <Text style={styles.cardMeta}>
-                  {item.rating_count > 0
-                    ? `★ ${item.avg_rating.toFixed(1)} (${item.rating_count})`
-                    : "No reviews yet"}
-                </Text>
               </View>
-              <Text style={styles.cardMeta}>
-                {item.location}
-                {item.years_experience
-                  ? ` · ${item.years_experience} yrs experience`
-                  : ""}
-              </Text>
-              {item.bio && <Text style={styles.cardBio}>{item.bio}</Text>}
             </Pressable>
           )}
         />
@@ -168,6 +186,18 @@ const styles = StyleSheet.create({
     borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 12,
+  },
+  cardRow: {
+    flexDirection: "row",
+    gap: 10,
+  },
+  thumbnail: {
+    height: 56,
+    width: 56,
+    borderRadius: 6,
+  },
+  cardBody: {
+    flex: 1,
     gap: 4,
   },
   cardHeader: {

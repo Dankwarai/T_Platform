@@ -10,7 +10,7 @@ import {
 import { useRouter } from "expo-router";
 import { useAuth } from "../../../contexts/auth-context";
 import { supabase } from "../../../lib/supabase";
-import { getProductImageUrl } from "../../../lib/product-image-url";
+import { getStorageImageUrl } from "../../../lib/storage-image-url";
 
 type ProductRow = {
   id: string;
@@ -93,7 +93,7 @@ export default function SupplierProductsScreen() {
               >
                 {item.images.length > 0 && (
                   <Image
-                    source={{ uri: getProductImageUrl(item.images[0]) }}
+                    source={{ uri: getStorageImageUrl("product-images", item.images[0]) }}
                     style={styles.thumbnail}
                   />
                 )}

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { getProductImageUrl } from "@/lib/product-image-url";
+import { getStorageImageUrl } from "@/lib/storage-image-url";
 
 type Category = { id: string; name: string };
 type ProductResult = {
@@ -112,7 +112,7 @@ export default function ProductsPage() {
                       {product.images.length > 0 && (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
-                          src={getProductImageUrl(product.images[0])}
+                          src={getStorageImageUrl("product-images", product.images[0])}
                           alt=""
                           className="h-14 w-14 rounded-md object-cover"
                         />

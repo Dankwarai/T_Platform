@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
-import { getProductImageUrl } from "../../lib/product-image-url";
+import { getStorageImageUrl } from "../../lib/storage-image-url";
 
 type Category = { id: string; name: string };
 type ProductResult = {
@@ -117,7 +117,7 @@ export default function ProductsScreen() {
               >
                 {item.images.length > 0 && (
                   <Image
-                    source={{ uri: getProductImageUrl(item.images[0]) }}
+                    source={{ uri: getStorageImageUrl("product-images", item.images[0]) }}
                     style={styles.thumbnail}
                   />
                 )}

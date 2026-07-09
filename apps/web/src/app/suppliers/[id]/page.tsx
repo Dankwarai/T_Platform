@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { FollowButton } from "@/components/FollowButton";
+import { getStorageImageUrl } from "@/lib/storage-image-url";
 
 export default async function SupplierDetailPage({
   params,
@@ -13,7 +14,9 @@ export default async function SupplierDetailPage({
 
   const { data: supplier } = await supabase
     .from("supplier_profiles")
-    .select("id, user_id, business_name, bio, location, follower_count")
+    .select(
+      "id, user_id, business_name, bio, location, follower_count, avatar_path",
+    )
     .eq("id", id)
     .single();
 
@@ -41,9 +44,19 @@ export default async function SupplierDetailPage({
 
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-semibold text-black dark:text-zinc-50">
-              {supplier.business_name}
-            </h1>
+            <div className="flex items-center gap-3">
+              {supplier.avatar_path && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={getStorageImageUrl("avatars", supplier.avatar_path)}
+                  alt=""
+                  className="h-12 w-12 rounded-full object-cover"
+                />
+              )}
+              <h1 className="text-2xl font-semibold text-slate-800 dark:text-slate-50">
+                {supplier.business_name}
+              </h1>
+            </div>
             <FollowButton followeeUserId={supplier.user_id} />
           </div>
           <p className="text-slate-600 dark:text-slate-400">

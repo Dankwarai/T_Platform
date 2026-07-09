@@ -13,7 +13,7 @@ import * as ImagePicker from "expo-image-picker";
 import { File } from "expo-file-system";
 import { randomUUID } from "expo-crypto";
 import { supabase } from "../../../lib/supabase";
-import { getProductImageUrl } from "../../../lib/product-image-url";
+import { getStorageImageUrl } from "../../../lib/storage-image-url";
 
 type Category = { id: string; name: string };
 type Variant = {
@@ -321,7 +321,7 @@ export default function EditProductScreen() {
           {images.map((path) => (
             <View key={path} style={styles.imageWrapper}>
               <Image
-                source={{ uri: getProductImageUrl(path) }}
+                source={{ uri: getStorageImageUrl("product-images", path) }}
                 style={styles.thumbnail}
               />
               <Pressable

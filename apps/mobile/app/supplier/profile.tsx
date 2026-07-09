@@ -9,10 +9,15 @@ import {
 import { useRouter } from "expo-router";
 import { useAuth } from "../../contexts/auth-context";
 import { supabase } from "../../lib/supabase";
+import { AvatarUpload } from "../../components/AvatarUpload";
 
 export default function SupplierProfileScreen() {
   const { user } = useAuth();
   const router = useRouter();
+  const [supplierProfileId, setSupplierProfileId] = useState<string | null>(
+    null,
+  );
+  const [avatarPath, setAvatarPath] = useState<string | null>(null);
   const [businessName, setBusinessName] = useState("");
   const [location, setLocation] = useState("");
   const [bio, setBio] = useState("");
@@ -25,11 +30,13 @@ export default function SupplierProfileScreen() {
 
     supabase
       .from("supplier_profiles")
-      .select("business_name, location, bio")
+      .select("id, business_name, location, bio, avatar_path")
       .eq("user_id", user.id)
       .single()
       .then(({ data }) => {
         if (data) {
+          setSupplierProfileId(data.id);
+          setAvatarPath(data.avatar_path ?? null);
           setBusinessName(data.business_name ?? "");
           setLocation(data.location ?? "");
           setBio(data.bio ?? "");
@@ -75,6 +82,16 @@ export default function SupplierProfileScreen() {
       <Text style={styles.subtitle}>
         Tailors and customers will see this on your public profile.
       </Text>
+
+      {user && supplierProfileId && (
+        <AvatarUpload
+          table="supplier_profiles"
+          profileId={supplierProfileId}
+          userId={user.id}
+          avatarPath={avatarPath}
+          onChange={setAvatarPath}
+        />
+      )}
 
       <TextInput
         style={styles.input}

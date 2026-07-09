@@ -14,6 +14,7 @@ const PROTECTED_PATHS = [
   "/supplier",
   "/products",
   "/orders",
+  "/customer",
 ];
 const AUTH_ONLY_PATHS = ["/login", "/signup"];
 

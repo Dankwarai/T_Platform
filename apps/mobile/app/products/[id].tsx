@@ -4,7 +4,7 @@ import { useLocalSearchParams } from "expo-router";
 import { BuyForm } from "../../components/BuyForm";
 import { ProductReviewForm } from "../../components/ProductReviewForm";
 import { supabase } from "../../lib/supabase";
-import { getProductImageUrl } from "../../lib/product-image-url";
+import { getStorageImageUrl } from "../../lib/storage-image-url";
 
 type Product = {
   id: string;
@@ -96,7 +96,7 @@ export default function ProductDetailScreen() {
           {product.images.map((path) => (
             <Image
               key={path}
-              source={{ uri: getProductImageUrl(path) }}
+              source={{ uri: getStorageImageUrl("product-images", path) }}
               style={styles.heroImage}
             />
           ))}

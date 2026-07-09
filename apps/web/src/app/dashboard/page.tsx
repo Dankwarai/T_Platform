@@ -68,6 +68,14 @@ export default async function DashboardPage() {
           My measurements
         </Link>
       )}
+      {profile?.role === "customer" && (
+        <Link
+          href="/customer/profile"
+          className="h-11 rounded-full border border-solid border-slate-200 px-5 leading-[44px] transition-colors hover:border-transparent hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"
+        >
+          My profile
+        </Link>
+      )}
       {profile?.role === "tailor" && (
         <Link
           href="/tailor/prices"

@@ -3,9 +3,15 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { AvatarUpload } from "@/components/AvatarUpload";
 
 export default function SupplierProfilePage() {
   const router = useRouter();
+  const [userId, setUserId] = useState<string | null>(null);
+  const [supplierProfileId, setSupplierProfileId] = useState<string | null>(
+    null,
+  );
+  const [avatarPath, setAvatarPath] = useState<string | null>(null);
   const [businessName, setBusinessName] = useState("");
   const [location, setLocation] = useState("");
   const [bio, setBio] = useState("");
@@ -20,13 +26,17 @@ export default function SupplierProfilePage() {
         router.replace("/login");
         return;
       }
+      setUserId(user.id);
+
       const { data } = await supabase
         .from("supplier_profiles")
-        .select("business_name, location, bio")
+        .select("id, business_name, location, bio, avatar_path")
         .eq("user_id", user.id)
         .single();
 
       if (data) {
+        setSupplierProfileId(data.id);
+        setAvatarPath(data.avatar_path ?? null);
         setBusinessName(data.business_name ?? "");
         setLocation(data.location ?? "");
         setBio(data.bio ?? "");
@@ -91,7 +101,17 @@ export default function SupplierProfilePage() {
           Tailors and customers will see this on your public profile.
         </p>
 
-        <label className="flex flex-col gap-1 text-sm text-zinc-700 dark:text-zinc-300">
+        {userId && supplierProfileId && (
+          <AvatarUpload
+            table="supplier_profiles"
+            profileId={supplierProfileId}
+            userId={userId}
+            avatarPath={avatarPath}
+            onChange={setAvatarPath}
+          />
+        )}
+
+        <label className="flex flex-col gap-1 text-sm text-slate-700 dark:text-slate-300">
           Business name
           <input
             type="text"

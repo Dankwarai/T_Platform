@@ -1,8 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { FollowButton } from "../../components/FollowButton";
 import { supabase } from "../../lib/supabase";
+import { getStorageImageUrl } from "../../lib/storage-image-url";
 
 type Supplier = {
   id: string;
@@ -11,6 +19,7 @@ type Supplier = {
   bio: string | null;
   location: string;
   follower_count: number;
+  avatar_path: string | null;
 };
 
 type Product = {
@@ -35,7 +44,9 @@ export default function SupplierDetailScreen() {
     Promise.all([
       supabase
         .from("supplier_profiles")
-        .select("id, user_id, business_name, bio, location, follower_count")
+        .select(
+          "id, user_id, business_name, bio, location, follower_count, avatar_path",
+        )
         .eq("id", id)
         .single(),
       supabase
@@ -75,7 +86,17 @@ export default function SupplierDetailScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.titleRow}>
-        <Text style={styles.title}>{supplier.business_name}</Text>
+        <View style={styles.titleIdentity}>
+          {supplier.avatar_path && (
+            <Image
+              source={{
+                uri: getStorageImageUrl("avatars", supplier.avatar_path),
+              }}
+              style={styles.avatar}
+            />
+          )}
+          <Text style={styles.title}>{supplier.business_name}</Text>
+        </View>
         <FollowButton followeeUserId={supplier.user_id} onChange={loadData} />
       </View>
       <Text style={styles.meta}>
@@ -133,6 +154,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  titleIdentity: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  avatar: {
+    height: 40,
+    width: 40,
+    borderRadius: 20,
   },
   title: {
     fontSize: 22,

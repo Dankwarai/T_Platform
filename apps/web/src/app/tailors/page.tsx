@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { SkillBadge } from "@/components/SkillBadge";
+import { getStorageImageUrl } from "@/lib/storage-image-url";
 
 type TailorResult = {
   id: string;
@@ -14,6 +15,7 @@ type TailorResult = {
   avg_rating: number;
   rating_count: number;
   skill_tier: string;
+  portfolio_images: string[];
 };
 
 export default function TailorsPage() {
@@ -31,7 +33,7 @@ export default function TailorsPage() {
       let query = supabase
         .from("tailor_profiles")
         .select(
-          "id, business_name, bio, location, years_experience, avg_rating, rating_count, skill_tier",
+          "id, business_name, bio, location, years_experience, avg_rating, rating_count, skill_tier, portfolio_images",
         )
         .neq("business_name", "")
         .order("avg_rating", { ascending: false });
@@ -94,30 +96,43 @@ export default function TailorsPage() {
               <li key={tailor.id}>
                 <Link
                   href={`/tailors/${tailor.id}`}
-                  className="flex flex-col gap-1 rounded-md border border-black/[.08] bg-white p-4 transition-colors hover:bg-black/[.02] dark:border-white/[.145] dark:bg-black dark:hover:bg-white/[.03]"
+                  className="flex items-center gap-3 rounded-md border border-slate-200 bg-white p-4 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-800/60"
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-2 font-medium text-black dark:text-zinc-50">
-                      {tailor.business_name}
-                      <SkillBadge tier={tailor.skill_tier} />
-                    </span>
-                    <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                      {tailor.rating_count > 0
-                        ? `★ ${tailor.avg_rating.toFixed(1)} (${tailor.rating_count})`
-                        : "No reviews yet"}
-                    </span>
-                  </div>
-                  <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                    {tailor.location}
-                    {tailor.years_experience
-                      ? ` · ${tailor.years_experience} yrs experience`
-                      : ""}
-                  </span>
-                  {tailor.bio && (
-                    <span className="text-sm text-zinc-500 dark:text-zinc-500">
-                      {tailor.bio}
-                    </span>
+                  {tailor.portfolio_images.length > 0 && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={getStorageImageUrl(
+                        "tailor-portfolio-images",
+                        tailor.portfolio_images[0],
+                      )}
+                      alt=""
+                      className="h-14 w-14 flex-shrink-0 rounded-md object-cover"
+                    />
                   )}
+                  <div className="flex flex-1 flex-col gap-1">
+                    <div className="flex items-center justify-between">
+                      <span className="flex items-center gap-2 font-medium text-slate-800 dark:text-slate-50">
+                        {tailor.business_name}
+                        <SkillBadge tier={tailor.skill_tier} />
+                      </span>
+                      <span className="text-sm text-slate-600 dark:text-slate-400">
+                        {tailor.rating_count > 0
+                          ? `★ ${tailor.avg_rating.toFixed(1)} (${tailor.rating_count})`
+                          : "No reviews yet"}
+                      </span>
+                    </div>
+                    <span className="text-sm text-slate-600 dark:text-slate-400">
+                      {tailor.location}
+                      {tailor.years_experience
+                        ? ` · ${tailor.years_experience} yrs experience`
+                        : ""}
+                    </span>
+                    {tailor.bio && (
+                      <span className="text-sm text-slate-500 dark:text-slate-500">
+                        {tailor.bio}
+                      </span>
+                    )}
+                  </div>
                 </Link>
               </li>
             ))}

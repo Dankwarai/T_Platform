@@ -5,6 +5,7 @@ import { ReviewForm } from "./review-form";
 import { RequestJobForm } from "./request-job-form";
 import { SkillBadge } from "@/components/SkillBadge";
 import { FollowButton } from "@/components/FollowButton";
+import { getStorageImageUrl } from "@/lib/storage-image-url";
 
 export default async function TailorDetailPage({
   params,
@@ -17,7 +18,7 @@ export default async function TailorDetailPage({
   const { data: tailor } = await supabase
     .from("tailor_profiles")
     .select(
-      "id, user_id, business_name, bio, location, years_experience, avg_rating, rating_count, follower_count, skill_score, skill_tier, tailor_specialties(garment_types(name))",
+      "id, user_id, business_name, bio, location, years_experience, avg_rating, rating_count, follower_count, skill_score, skill_tier, portfolio_images, avatar_path, tailor_specialties(garment_types(name))",
     )
     .eq("id", id)
     .single();
@@ -51,11 +52,35 @@ export default async function TailorDetailPage({
           ← Back to search
         </Link>
 
+        {tailor.portfolio_images.length > 0 && (
+          <div className="flex gap-3 overflow-x-auto">
+            {tailor.portfolio_images.map((path: string) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={path}
+                src={getStorageImageUrl("tailor-portfolio-images", path)}
+                alt=""
+                className="h-48 w-48 flex-shrink-0 rounded-md object-cover"
+              />
+            ))}
+          </div>
+        )}
+
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-semibold text-black dark:text-zinc-50">
-              {tailor.business_name}
-            </h1>
+            <div className="flex items-center gap-3">
+              {tailor.avatar_path && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={getStorageImageUrl("avatars", tailor.avatar_path)}
+                  alt=""
+                  className="h-12 w-12 rounded-full object-cover"
+                />
+              )}
+              <h1 className="text-2xl font-semibold text-slate-800 dark:text-slate-50">
+                {tailor.business_name}
+              </h1>
+            </div>
             <div className="flex items-center gap-2">
               <SkillBadge tier={tailor.skill_tier} />
               <FollowButton followeeUserId={tailor.user_id} />

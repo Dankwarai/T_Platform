@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getProductImageUrl } from "@/lib/product-image-url";
+import { getStorageImageUrl } from "@/lib/storage-image-url";
 import { BuyForm } from "./buy-form";
 import { ReviewForm } from "./review-form";
 
@@ -62,7 +62,7 @@ export default async function ProductDetailPage({
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 key={path}
-                src={getProductImageUrl(path)}
+                src={getStorageImageUrl("product-images", path)}
                 alt=""
                 className="h-48 w-48 flex-shrink-0 rounded-md object-cover"
               />

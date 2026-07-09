@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { getProductImageUrl } from "@/lib/product-image-url";
+import { getStorageImageUrl } from "@/lib/storage-image-url";
 
 type Category = { id: string; name: string };
 type Variant = {
@@ -329,7 +329,7 @@ export default function EditProductPage() {
                 <div key={path} className="relative">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={getProductImageUrl(path)}
+                    src={getStorageImageUrl("product-images", path)}
                     alt=""
                     className="h-24 w-24 rounded-md object-cover"
                   />

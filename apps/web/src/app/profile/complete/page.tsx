@@ -3,15 +3,22 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { getStorageImageUrl } from "@/lib/storage-image-url";
+import { AvatarUpload } from "@/components/AvatarUpload";
 
 type GarmentType = { id: string; name: string };
 
 export default function CompleteTailorProfilePage() {
   const router = useRouter();
+  const [userId, setUserId] = useState<string | null>(null);
+  const [avatarPath, setAvatarPath] = useState<string | null>(null);
+  const [tailorProfileId, setTailorProfileId] = useState<string | null>(null);
   const [businessName, setBusinessName] = useState("");
   const [location, setLocation] = useState("");
   const [bio, setBio] = useState("");
   const [yearsExperience, setYearsExperience] = useState("");
+  const [portfolioImages, setPortfolioImages] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
   const [garmentTypes, setGarmentTypes] = useState<GarmentType[]>([]);
   const [specialtyIds, setSpecialtyIds] = useState<Set<string>>(new Set());
   const [error, setError] = useState<string | null>(null);
@@ -25,17 +32,24 @@ export default function CompleteTailorProfilePage() {
         router.replace("/login");
         return;
       }
+      setUserId(user.id);
+
       const { data } = await supabase
         .from("tailor_profiles")
-        .select("id, business_name, location, bio, years_experience")
+        .select(
+          "id, business_name, location, bio, years_experience, portfolio_images, avatar_path",
+        )
         .eq("user_id", user.id)
         .single();
 
       if (data) {
+        setTailorProfileId(data.id);
+        setAvatarPath(data.avatar_path ?? null);
         setBusinessName(data.business_name ?? "");
         setLocation(data.location ?? "");
         setBio(data.bio ?? "");
         setYearsExperience(data.years_experience?.toString() ?? "");
+        setPortfolioImages(data.portfolio_images ?? []);
 
         const { data: existingSpecialties } = await supabase
           .from("tailor_specialties")
@@ -66,6 +80,70 @@ export default function CompleteTailorProfilePage() {
       }
       return next;
     });
+  }
+
+  async function handleUploadPortfolioImage(
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file || !tailorProfileId) return;
+
+    setUploading(true);
+    setError(null);
+
+    const supabase = createClient();
+    const ext = file.name.split(".").pop() ?? "jpg";
+    const path = `${tailorProfileId}/${crypto.randomUUID()}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("tailor-portfolio-images")
+      .upload(path, file, { contentType: file.type });
+
+    if (uploadError) {
+      setError(uploadError.message);
+      setUploading(false);
+      return;
+    }
+
+    const nextImages = [...portfolioImages, path];
+    const { error: updateError } = await supabase
+      .from("tailor_profiles")
+      .update({ portfolio_images: nextImages })
+      .eq("id", tailorProfileId);
+
+    if (updateError) {
+      setError(updateError.message);
+      setUploading(false);
+      return;
+    }
+
+    setPortfolioImages(nextImages);
+    setUploading(false);
+  }
+
+  async function handleDeletePortfolioImage(path: string) {
+    if (!tailorProfileId) return;
+    setUploading(true);
+    setError(null);
+
+    const supabase = createClient();
+    await supabase.storage.from("tailor-portfolio-images").remove([path]);
+
+    const nextImages = portfolioImages.filter((p) => p !== path);
+    const { error: updateError } = await supabase
+      .from("tailor_profiles")
+      .update({ portfolio_images: nextImages })
+      .eq("id", tailorProfileId);
+
+    if (updateError) {
+      setError(updateError.message);
+      setUploading(false);
+      return;
+    }
+
+    setPortfolioImages(nextImages);
+    setUploading(false);
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -149,7 +227,17 @@ export default function CompleteTailorProfilePage() {
           Customers will see this on your public profile.
         </p>
 
-        <label className="flex flex-col gap-1 text-sm text-zinc-700 dark:text-zinc-300">
+        {userId && tailorProfileId && (
+          <AvatarUpload
+            table="tailor_profiles"
+            profileId={tailorProfileId}
+            userId={userId}
+            avatarPath={avatarPath}
+            onChange={setAvatarPath}
+          />
+        )}
+
+        <label className="flex flex-col gap-1 text-sm text-slate-700 dark:text-slate-300">
           Business name
           <input
             type="text"
@@ -215,6 +303,44 @@ export default function CompleteTailorProfilePage() {
             ))}
           </div>
         </div>
+
+        {tailorProfileId && (
+          <div className="flex flex-col gap-2 text-sm text-slate-700 dark:text-slate-300">
+            Portfolio
+            {portfolioImages.length > 0 && (
+              <div className="flex flex-wrap gap-3">
+                {portfolioImages.map((path) => (
+                  <div key={path} className="relative">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={getStorageImageUrl("tailor-portfolio-images", path)}
+                      alt=""
+                      className="h-20 w-20 rounded-md object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleDeletePortfolioImage(path)}
+                      disabled={uploading}
+                      className="absolute -right-2 -top-2 h-6 w-6 rounded-full bg-red-600 text-xs text-white disabled:opacity-50"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <label className="flex h-10 w-fit cursor-pointer items-center rounded-full border border-slate-200 px-4 text-sm transition-colors hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800">
+              {uploading ? "Uploading..." : "Add photo"}
+              <input
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                onChange={handleUploadPortfolioImage}
+                disabled={uploading}
+                className="hidden"
+              />
+            </label>
+          </div>
+        )}
 
         {error && <p className="text-sm text-red-600">{error}</p>}
 

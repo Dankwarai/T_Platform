@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { FollowButton } from "../../components/FollowButton";
 import { RequestJobForm } from "../../components/RequestJobForm";
 import { ReviewForm } from "../../components/ReviewForm";
 import { SkillBadge } from "../../components/SkillBadge";
 import { supabase } from "../../lib/supabase";
+import { getStorageImageUrl } from "../../lib/storage-image-url";
 
 type Tailor = {
   id: string;
@@ -18,6 +19,8 @@ type Tailor = {
   rating_count: number;
   follower_count: number;
   skill_tier: string;
+  portfolio_images: string[];
+  avatar_path: string | null;
   // Left loosely typed — without generated DB types, PostgREST's embedded
   // resource shape (one-to-one vs one-to-many) can't be inferred precisely.
   tailor_specialties: unknown;
@@ -42,7 +45,7 @@ export default function TailorDetailScreen() {
       supabase
         .from("tailor_profiles")
         .select(
-          "id, user_id, business_name, bio, location, years_experience, avg_rating, rating_count, follower_count, skill_tier, tailor_specialties(garment_types(name))",
+          "id, user_id, business_name, bio, location, years_experience, avg_rating, rating_count, follower_count, skill_tier, portfolio_images, avatar_path, tailor_specialties(garment_types(name))",
         )
         .eq("id", id)
         .single(),
@@ -91,8 +94,27 @@ export default function TailorDetailScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      {tailor.portfolio_images.length > 0 && (
+        <ScrollView horizontal style={styles.imageScroll}>
+          {tailor.portfolio_images.map((path) => (
+            <Image
+              key={path}
+              source={{ uri: getStorageImageUrl("tailor-portfolio-images", path) }}
+              style={styles.heroImage}
+            />
+          ))}
+        </ScrollView>
+      )}
       <View style={styles.titleRow}>
-        <Text style={styles.title}>{tailor.business_name}</Text>
+        <View style={styles.titleIdentity}>
+          {tailor.avatar_path && (
+            <Image
+              source={{ uri: getStorageImageUrl("avatars", tailor.avatar_path) }}
+              style={styles.avatar}
+            />
+          )}
+          <Text style={styles.title}>{tailor.business_name}</Text>
+        </View>
         <View style={styles.titleActions}>
           <SkillBadge tier={tailor.skill_tier} />
           <FollowButton followeeUserId={tailor.user_id} onChange={loadData} />
@@ -158,6 +180,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
+  titleIdentity: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  avatar: {
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+  },
   titleActions: {
     flexDirection: "row",
     alignItems: "center",
@@ -172,6 +204,15 @@ const styles = StyleSheet.create({
   },
   bio: {
     marginTop: 8,
+  },
+  imageScroll: {
+    flexGrow: 0,
+  },
+  heroImage: {
+    height: 192,
+    width: 192,
+    borderRadius: 8,
+    marginRight: 12,
   },
   reviewFormWrapper: {
     marginTop: 12,
