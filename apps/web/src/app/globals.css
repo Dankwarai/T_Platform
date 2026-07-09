@@ -1,21 +1,32 @@
 @import "tailwindcss";
 
+/* Slate neutrals + an indigo accent — a modern SaaS-style palette. Dark
+   mode is capped at slate-900/800 (never near-black) so surfaces stay
+   visibly distinct instead of reading as flat black. Each token flips
+   under prefers-color-scheme, so utilities built from them (bg-accent,
+   hover:bg-accent-hover) never need a separate dark: variant. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc; /* slate-50 */
+  --foreground: #0f172a; /* slate-900 */
+  --accent: #4f46e5; /* indigo-600 */
+  --accent-hover: #4338ca; /* indigo-700 */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0f172a; /* slate-900 — not slate-950, stays clearly non-black */
+    --foreground: #f1f5f9; /* slate-100 */
+    --accent: #6366f1; /* indigo-500 — brighter for contrast on a dark bg */
+    --accent-hover: #818cf8; /* indigo-400 */
   }
 }
 

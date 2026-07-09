@@ -94,7 +94,7 @@ export function PayButton({
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: "#111",
+    backgroundColor: "#4f46e5",
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 16,
@@ -112,6 +112,6 @@ const styles = StyleSheet.create({
     color: "#dc2626",
   },
   confirming: {
-    color: "#666",
+    color: "#475569",
   },
 });

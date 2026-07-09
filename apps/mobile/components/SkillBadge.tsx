@@ -8,7 +8,7 @@ const TIER_LABELS: Record<string, string> = {
 };
 
 const TIER_COLORS: Record<string, { bg: string; text: string }> = {
-  beginner: { bg: "#f4f4f5", text: "#52525b" },
+  beginner: { bg: "#f1f5f9", text: "#475569" },
   skilled: { bg: "#dbeafe", text: "#1d4ed8" },
   expert: { bg: "#ede9fe", text: "#6d28d9" },
   master: { bg: "#fef3c7", text: "#b45309" },

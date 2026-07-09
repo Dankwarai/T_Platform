@@ -494,7 +494,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   backLink: {
-    color: "#666",
+    color: "#475569",
     textDecorationLine: "underline",
   },
   title: {
@@ -510,7 +510,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   meta: {
-    color: "#666",
+    color: "#475569",
   },
   categoryRow: {
     flexDirection: "row",
@@ -519,14 +519,14 @@ const styles = StyleSheet.create({
   },
   categoryOption: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 20,
     paddingVertical: 8,
     paddingHorizontal: 14,
   },
   categoryOptionSelected: {
-    borderColor: "#111",
-    backgroundColor: "#f5f5f5",
+    borderColor: "#4f46e5",
+    backgroundColor: "#e0e7ff",
   },
   unitRow: {
     flexDirection: "row",
@@ -534,21 +534,21 @@ const styles = StyleSheet.create({
   },
   unitOption: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 14,
     paddingVertical: 4,
     paddingHorizontal: 10,
   },
   unitOptionSelected: {
-    borderColor: "#111",
-    backgroundColor: "#f5f5f5",
+    borderColor: "#4f46e5",
+    backgroundColor: "#e0e7ff",
   },
   unitOptionText: {
     fontSize: 12,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 12,
   },
@@ -568,21 +568,21 @@ const styles = StyleSheet.create({
   },
   smallInput: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 8,
     fontSize: 13,
   },
   variantCard: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 10,
     gap: 6,
   },
   addVariantBox: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#e2e8f0",
     borderStyle: "dashed",
     borderRadius: 8,
     padding: 10,
@@ -594,7 +594,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
   },
   imageRow: {
     flexDirection: "row",
@@ -632,8 +632,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   primaryButton: {
-    backgroundColor: "#111",
-    borderColor: "#111",
+    backgroundColor: "#4f46e5",
+    borderColor: "#4f46e5",
   },
   primaryButtonText: {
     color: "#fff",
@@ -649,7 +649,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   button: {
-    backgroundColor: "#111",
+    backgroundColor: "#4f46e5",
     borderRadius: 24,
     padding: 14,
     alignItems: "center",

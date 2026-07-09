@@ -57,9 +57,9 @@ export default function ProductsPage() {
   }, [name, categoryId]);
 
   return (
-    <div className="flex flex-1 flex-col items-center bg-zinc-50 px-6 py-10 dark:bg-black">
+    <div className="flex flex-1 flex-col items-center bg-slate-50 px-6 py-10 dark:bg-slate-900">
       <div className="flex w-full max-w-2xl flex-col gap-6">
-        <h1 className="text-2xl font-semibold text-black dark:text-zinc-50">
+        <h1 className="text-2xl font-semibold text-slate-800 dark:text-slate-50">
           Marketplace
         </h1>
 
@@ -69,12 +69,12 @@ export default function ProductsPage() {
             placeholder="Search products"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="flex-1 rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
+            className="flex-1 rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50"
           />
           <select
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
-            className="rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
+            className="rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50"
           >
             <option value="">All categories</option>
             {categories.map((c) => (
@@ -86,9 +86,9 @@ export default function ProductsPage() {
         </div>
 
         {loading ? (
-          <p className="text-zinc-600 dark:text-zinc-400">Loading...</p>
+          <p className="text-slate-600 dark:text-slate-400">Loading...</p>
         ) : results.length === 0 ? (
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-slate-600 dark:text-slate-400">
             No products found.
           </p>
         ) : (
@@ -106,7 +106,7 @@ export default function ProductsPage() {
                 <li key={product.id}>
                   <Link
                     href={`/products/${product.id}`}
-                    className="flex items-center justify-between gap-3 rounded-md border border-black/[.08] bg-white p-4 transition-colors hover:bg-black/[.02] dark:border-white/[.145] dark:bg-black dark:hover:bg-white/[.03]"
+                    className="flex items-center justify-between gap-3 rounded-md border border-slate-200 bg-white p-4 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-800/60"
                   >
                     <div className="flex items-center gap-3">
                       {product.images.length > 0 && (
@@ -118,16 +118,16 @@ export default function ProductsPage() {
                         />
                       )}
                       <div className="flex flex-col">
-                        <span className="font-medium text-black dark:text-zinc-50">
+                        <span className="font-medium text-slate-800 dark:text-slate-50">
                           {product.name}
                         </span>
-                        <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                        <span className="text-sm text-slate-600 dark:text-slate-400">
                           {product.supplier_profiles?.business_name} ·{" "}
                           {product.product_categories?.name} · {priceRange}
                         </span>
                       </div>
                     </div>
-                    <span className="text-sm text-zinc-500">
+                    <span className="text-sm text-slate-500">
                       {product.rating_count > 0
                         ? `★ ${product.avg_rating.toFixed(1)} (${product.rating_count})`
                         : "No reviews yet"}

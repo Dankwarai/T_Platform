@@ -41,9 +41,9 @@ export default function SuppliersPage() {
   }, [name, location]);
 
   return (
-    <div className="flex flex-1 flex-col items-center bg-zinc-50 px-6 py-10 dark:bg-black">
+    <div className="flex flex-1 flex-col items-center bg-slate-50 px-6 py-10 dark:bg-slate-900">
       <div className="flex w-full max-w-2xl flex-col gap-6">
-        <h1 className="text-2xl font-semibold text-black dark:text-zinc-50">
+        <h1 className="text-2xl font-semibold text-slate-800 dark:text-slate-50">
           Find a supplier
         </h1>
 
@@ -53,21 +53,21 @@ export default function SuppliersPage() {
             placeholder="Search by name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="flex-1 rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
+            className="flex-1 rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50"
           />
           <input
             type="text"
             placeholder="Location"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            className="flex-1 rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
+            className="flex-1 rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50"
           />
         </div>
 
         {loading ? (
-          <p className="text-zinc-600 dark:text-zinc-400">Loading...</p>
+          <p className="text-slate-600 dark:text-slate-400">Loading...</p>
         ) : results.length === 0 ? (
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-slate-600 dark:text-slate-400">
             No suppliers found.
           </p>
         ) : (
@@ -76,22 +76,22 @@ export default function SuppliersPage() {
               <li key={supplier.id}>
                 <Link
                   href={`/suppliers/${supplier.id}`}
-                  className="flex flex-col gap-1 rounded-md border border-black/[.08] bg-white p-4 transition-colors hover:bg-black/[.02] dark:border-white/[.145] dark:bg-black dark:hover:bg-white/[.03]"
+                  className="flex flex-col gap-1 rounded-md border border-slate-200 bg-white p-4 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-800/60"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium text-black dark:text-zinc-50">
+                    <span className="font-medium text-slate-800 dark:text-slate-50">
                       {supplier.business_name}
                     </span>
-                    <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                    <span className="text-sm text-slate-600 dark:text-slate-400">
                       {supplier.follower_count} follower
                       {supplier.follower_count === 1 ? "" : "s"}
                     </span>
                   </div>
-                  <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                  <span className="text-sm text-slate-600 dark:text-slate-400">
                     {supplier.location}
                   </span>
                   {supplier.bio && (
-                    <span className="text-sm text-zinc-500 dark:text-zinc-500">
+                    <span className="text-sm text-slate-500 dark:text-slate-500">
                       {supplier.bio}
                     </span>
                   )}

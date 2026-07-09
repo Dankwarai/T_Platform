@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 12,
   },
@@ -166,14 +166,14 @@ const styles = StyleSheet.create({
   },
   categoryOption: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 12,
   },
   categoryOptionSelected: {
-    borderColor: "#111",
-    backgroundColor: "#f5f5f5",
+    borderColor: "#4f46e5",
+    backgroundColor: "#e0e7ff",
   },
   card: {
     flexDirection: "row",
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 12,
     marginTop: 8,
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   meta: {
-    color: "#666",
+    color: "#475569",
     fontSize: 13,
   },
 });

@@ -7,7 +7,7 @@ const TIER_LABELS: Record<string, string> = {
 
 const TIER_STYLES: Record<string, string> = {
   beginner:
-    "bg-zinc-100 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-400",
+    "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400",
   skilled: "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300",
   expert:
     "bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300",

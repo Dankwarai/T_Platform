@@ -78,7 +78,7 @@ export function FollowButton({
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: "#111",
+    backgroundColor: "#4f46e5",
     borderRadius: 20,
     paddingVertical: 8,
     paddingHorizontal: 16,
@@ -86,14 +86,14 @@ const styles = StyleSheet.create({
   followingButton: {
     backgroundColor: "#fff",
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
   },
   followText: {
     color: "#fff",
     fontWeight: "600",
   },
   followingText: {
-    color: "#111",
+    color: "#0f172a",
     fontWeight: "600",
   },
 });

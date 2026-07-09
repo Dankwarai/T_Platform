@@ -30,11 +30,11 @@ export default async function SupplierDetailPage({
     .order("created_at", { ascending: false });
 
   return (
-    <div className="flex flex-1 flex-col items-center bg-zinc-50 px-6 py-10 dark:bg-black">
+    <div className="flex flex-1 flex-col items-center bg-slate-50 px-6 py-10 dark:bg-slate-900">
       <div className="flex w-full max-w-2xl flex-col gap-6">
         <Link
           href="/suppliers"
-          className="text-sm text-zinc-600 underline dark:text-zinc-400"
+          className="text-sm text-slate-600 underline dark:text-slate-400"
         >
           ← Back to search
         </Link>
@@ -46,23 +46,23 @@ export default async function SupplierDetailPage({
             </h1>
             <FollowButton followeeUserId={supplier.user_id} />
           </div>
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-slate-600 dark:text-slate-400">
             {supplier.location} · {supplier.follower_count} follower
             {supplier.follower_count === 1 ? "" : "s"}
           </p>
           {supplier.bio && (
-            <p className="mt-2 text-black dark:text-zinc-50">
+            <p className="mt-2 text-slate-800 dark:text-slate-50">
               {supplier.bio}
             </p>
           )}
         </div>
 
         <div className="flex flex-col gap-3">
-          <h2 className="text-lg font-medium text-black dark:text-zinc-50">
+          <h2 className="text-lg font-medium text-slate-800 dark:text-slate-50">
             Products
           </h2>
           {!products || products.length === 0 ? (
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-slate-600 dark:text-slate-400">
               No products listed yet.
             </p>
           ) : (
@@ -85,17 +85,17 @@ export default async function SupplierDetailPage({
                   <li key={product.id}>
                     <Link
                       href={`/products/${product.id}`}
-                      className="flex items-center justify-between rounded-md border border-black/[.08] bg-white p-4 transition-colors hover:bg-black/[.02] dark:border-white/[.145] dark:bg-black dark:hover:bg-white/[.03]"
+                      className="flex items-center justify-between rounded-md border border-slate-200 bg-white p-4 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-800/60"
                     >
                       <div className="flex flex-col">
-                        <span className="font-medium text-black dark:text-zinc-50">
+                        <span className="font-medium text-slate-800 dark:text-slate-50">
                           {product.name}
                         </span>
-                        <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                        <span className="text-sm text-slate-600 dark:text-slate-400">
                           {category?.name} · {priceRange}
                         </span>
                       </div>
-                      <span className="text-sm text-zinc-500">
+                      <span className="text-sm text-slate-500">
                         {product.rating_count > 0
                           ? `★ ${product.avg_rating.toFixed(1)} (${product.rating_count})`
                           : "No reviews yet"}

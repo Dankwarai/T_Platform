@@ -191,7 +191,7 @@ export function BuyForm({
 const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 12,
     gap: 8,
@@ -204,20 +204,20 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   meta: {
-    color: "#666",
+    color: "#475569",
   },
   optionRow: {
     gap: 6,
   },
   option: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 8,
   },
   optionSelected: {
-    borderColor: "#111",
-    backgroundColor: "#f5f5f5",
+    borderColor: "#4f46e5",
+    backgroundColor: "#e0e7ff",
   },
   optionDisabled: {
     opacity: 0.4,
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 10,
   },
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
   button: {
-    backgroundColor: "#111",
+    backgroundColor: "#4f46e5",
     borderRadius: 20,
     paddingVertical: 10,
     alignItems: "center",

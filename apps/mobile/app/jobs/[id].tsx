@@ -391,14 +391,14 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   meta: {
-    color: "#666",
+    color: "#475569",
   },
   error: {
     color: "#dc2626",
   },
   actionBox: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 12,
     gap: 8,
@@ -412,7 +412,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 12,
   },
@@ -429,12 +429,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     marginTop: 8,
   },
   primaryButton: {
-    backgroundColor: "#111",
-    borderColor: "#111",
+    backgroundColor: "#4f46e5",
+    borderColor: "#4f46e5",
   },
   primaryButtonText: {
     color: "#fff",
@@ -452,7 +452,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   historyItem: {
-    color: "#666",
+    color: "#475569",
     fontSize: 13,
   },
 });

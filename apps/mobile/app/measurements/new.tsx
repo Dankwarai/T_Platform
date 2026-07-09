@@ -222,18 +222,18 @@ const styles = StyleSheet.create({
   },
   option: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 14,
   },
   optionSelected: {
-    borderColor: "#111",
-    backgroundColor: "#f5f5f5",
+    borderColor: "#4f46e5",
+    backgroundColor: "#e0e7ff",
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 12,
   },
@@ -245,11 +245,11 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   hint: {
-    color: "#888",
+    color: "#64748b",
     fontSize: 12,
   },
   button: {
-    backgroundColor: "#111",
+    backgroundColor: "#4f46e5",
     borderRadius: 24,
     padding: 14,
     alignItems: "center",

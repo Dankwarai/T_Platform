@@ -108,19 +108,19 @@ export default function TailorServicePricesPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-1 items-center justify-center bg-zinc-50 dark:bg-black">
-        <p className="text-zinc-600 dark:text-zinc-400">Loading...</p>
+      <div className="flex flex-1 items-center justify-center bg-slate-50 dark:bg-slate-900">
+        <p className="text-slate-600 dark:text-slate-400">Loading...</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-1 flex-col items-center bg-zinc-50 px-6 py-10 dark:bg-black">
+    <div className="flex flex-1 flex-col items-center bg-slate-50 px-6 py-10 dark:bg-slate-900">
       <div className="flex w-full max-w-sm flex-col gap-4">
-        <h1 className="text-2xl font-semibold text-black dark:text-zinc-50">
+        <h1 className="text-2xl font-semibold text-slate-800 dark:text-slate-50">
           Standard prices
         </h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="text-sm text-slate-600 dark:text-slate-400">
           Set a standard rate per garment type. Customers see this before
           requesting a job; you can still quote a custom price when
           accepting.
@@ -129,7 +129,7 @@ export default function TailorServicePricesPage() {
         {garmentTypes.map((gt) => (
           <label
             key={gt.id}
-            className="flex flex-col gap-1 text-sm text-zinc-700 dark:text-zinc-300"
+            className="flex flex-col gap-1 text-sm text-slate-700 dark:text-slate-300"
           >
             {gt.name}
             <input
@@ -141,7 +141,7 @@ export default function TailorServicePricesPage() {
               onChange={(e) =>
                 setPrices((prev) => ({ ...prev, [gt.id]: e.target.value }))
               }
-              className="rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
+              className="rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50"
             />
           </label>
         ))}
@@ -152,7 +152,7 @@ export default function TailorServicePricesPage() {
         <button
           onClick={handleSave}
           disabled={pending}
-          className="mt-2 h-11 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] disabled:opacity-50 dark:hover:bg-[#ccc]"
+          className="mt-2 h-11 rounded-full bg-accent px-5 text-white transition-colors hover:bg-accent-hover disabled:opacity-50"
         >
           {pending ? "Saving..." : "Save prices"}
         </button>

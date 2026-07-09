@@ -160,18 +160,18 @@ const styles = StyleSheet.create({
   },
   categoryOption: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 20,
     paddingVertical: 8,
     paddingHorizontal: 14,
   },
   categoryOptionSelected: {
-    borderColor: "#111",
-    backgroundColor: "#f5f5f5",
+    borderColor: "#4f46e5",
+    backgroundColor: "#e0e7ff",
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 12,
   },
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     textAlignVertical: "top",
   },
   button: {
-    backgroundColor: "#111",
+    backgroundColor: "#4f46e5",
     borderRadius: 24,
     padding: 14,
     alignItems: "center",

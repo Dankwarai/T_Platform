@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 12,
   },
@@ -150,14 +150,14 @@ const styles = StyleSheet.create({
   },
   ratingOption: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     paddingVertical: 6,
     paddingHorizontal: 12,
   },
   ratingSelected: {
-    borderColor: "#111",
-    backgroundColor: "#f5f5f5",
+    borderColor: "#4f46e5",
+    backgroundColor: "#e0e7ff",
   },
   list: {
     gap: 12,
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   },
   card: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 12,
     gap: 4,
@@ -183,15 +183,15 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   cardMeta: {
-    color: "#666",
+    color: "#475569",
     fontSize: 13,
   },
   cardBio: {
-    color: "#888",
+    color: "#64748b",
     fontSize: 13,
   },
   empty: {
-    color: "#666",
+    color: "#475569",
     marginTop: 12,
   },
 });

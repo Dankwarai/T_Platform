@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 12,
   },
@@ -165,14 +165,14 @@ const styles = StyleSheet.create({
   },
   option: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 14,
   },
   optionSelected: {
-    borderColor: "#111",
-    backgroundColor: "#f5f5f5",
+    borderColor: "#4f46e5",
+    backgroundColor: "#e0e7ff",
   },
   list: {
     gap: 12,
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 12,
   },
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     width: 24,
     fontSize: 16,
     fontWeight: "700",
-    color: "#999",
+    color: "#64748b",
   },
   cardBody: {
     flex: 1,
@@ -205,11 +205,11 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   cardMeta: {
-    color: "#666",
+    color: "#475569",
     fontSize: 13,
   },
   empty: {
-    color: "#666",
+    color: "#475569",
     marginTop: 12,
   },
 });

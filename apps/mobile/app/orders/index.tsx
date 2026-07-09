@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 12,
     marginTop: 8,
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   meta: {
-    color: "#666",
+    color: "#475569",
     fontSize: 13,
   },
 });

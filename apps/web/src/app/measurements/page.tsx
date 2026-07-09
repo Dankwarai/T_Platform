@@ -64,24 +64,24 @@ export default function MeasurementsPage() {
   }, [router]);
 
   return (
-    <div className="flex flex-1 flex-col items-center bg-zinc-50 px-6 py-10 dark:bg-black">
+    <div className="flex flex-1 flex-col items-center bg-slate-50 px-6 py-10 dark:bg-slate-900">
       <div className="flex w-full max-w-2xl flex-col gap-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold text-black dark:text-zinc-50">
+          <h1 className="text-2xl font-semibold text-slate-800 dark:text-slate-50">
             My measurements
           </h1>
           <Link
             href="/measurements/new"
-            className="h-10 rounded-full bg-foreground px-4 leading-[40px] text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc]"
+            className="h-10 rounded-full bg-accent px-4 leading-[40px] text-white transition-colors hover:bg-accent-hover"
           >
             + New
           </Link>
         </div>
 
         {loading ? (
-          <p className="text-zinc-600 dark:text-zinc-400">Loading...</p>
+          <p className="text-slate-600 dark:text-slate-400">Loading...</p>
         ) : records.length === 0 ? (
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-slate-600 dark:text-slate-400">
             No measurement records yet.
           </p>
         ) : (
@@ -90,18 +90,18 @@ export default function MeasurementsPage() {
               <li key={record.id}>
                 <Link
                   href={`/measurements/${record.id}`}
-                  className="flex items-center justify-between rounded-md border border-black/[.08] bg-white p-4 transition-colors hover:bg-black/[.02] dark:border-white/[.145] dark:bg-black dark:hover:bg-white/[.03]"
+                  className="flex items-center justify-between rounded-md border border-slate-200 bg-white p-4 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-800/60"
                 >
                   <div className="flex flex-col">
-                    <span className="font-medium text-black dark:text-zinc-50">
+                    <span className="font-medium text-slate-800 dark:text-slate-50">
                       {record.label}
                     </span>
-                    <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                    <span className="text-sm text-slate-600 dark:text-slate-400">
                       {record.garment_types?.name} ·{" "}
                       {new Date(record.created_at).toLocaleDateString()}
                     </span>
                   </div>
-                  <span className="text-sm text-zinc-500">
+                  <span className="text-sm text-slate-500">
                     {record.unit}
                   </span>
                 </Link>

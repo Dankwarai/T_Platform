@@ -69,8 +69,8 @@ export function FollowButton({ followeeUserId }: { followeeUserId: string }) {
       disabled={pending}
       className={
         isFollowing
-          ? "h-10 rounded-full border border-solid border-black/[.08] px-5 text-sm transition-colors hover:border-transparent hover:bg-black/[.04] disabled:opacity-50 dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
-          : "h-10 rounded-full bg-foreground px-5 text-sm text-background transition-colors hover:bg-[#383838] disabled:opacity-50 dark:hover:bg-[#ccc]"
+          ? "h-10 rounded-full border border-solid border-slate-200 px-5 text-sm transition-colors hover:border-transparent hover:bg-slate-100 disabled:opacity-50 dark:border-slate-700 dark:hover:bg-slate-800"
+          : "h-10 rounded-full bg-accent px-5 text-sm text-white transition-colors hover:bg-accent-hover disabled:opacity-50"
       }
     >
       {pending ? "..." : isFollowing ? "Following" : "Follow"}

@@ -163,11 +163,11 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   meta: {
-    color: "#666",
+    color: "#475569",
   },
   bold: {
     fontWeight: "600",
-    color: "#000",
+    color: "#0f172a",
   },
   bio: {
     marginTop: 8,
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
   },
   reviewCard: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 12,
     marginTop: 8,

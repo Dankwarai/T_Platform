@@ -81,7 +81,7 @@ export function PayButton({
 
   if (confirming) {
     return (
-      <p className="text-sm text-zinc-600 dark:text-zinc-400">
+      <p className="text-sm text-slate-600 dark:text-slate-400">
         Confirming payment...
       </p>
     );
@@ -93,7 +93,7 @@ export function PayButton({
       <button
         onClick={handlePay}
         disabled={pending}
-        className="h-10 rounded-full bg-foreground px-5 text-sm text-background transition-colors hover:bg-[#383838] disabled:opacity-50 dark:hover:bg-[#ccc]"
+        className="h-10 rounded-full bg-accent px-5 text-sm text-white transition-colors hover:bg-accent-hover disabled:opacity-50"
       >
         {pending ? "Redirecting to checkout..." : payLabel}
       </button>

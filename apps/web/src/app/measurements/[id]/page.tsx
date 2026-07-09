@@ -131,50 +131,50 @@ export default function MeasurementRecordDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-1 items-center justify-center bg-zinc-50 dark:bg-black">
-        <p className="text-zinc-600 dark:text-zinc-400">Loading...</p>
+      <div className="flex flex-1 items-center justify-center bg-slate-50 dark:bg-slate-900">
+        <p className="text-slate-600 dark:text-slate-400">Loading...</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-1 flex-col items-center bg-zinc-50 px-6 py-10 dark:bg-black">
+    <div className="flex flex-1 flex-col items-center bg-slate-50 px-6 py-10 dark:bg-slate-900">
       <form
         onSubmit={handleSave}
         className="flex w-full max-w-sm flex-col gap-4"
       >
-        <h1 className="text-2xl font-semibold text-black dark:text-zinc-50">
+        <h1 className="text-2xl font-semibold text-slate-800 dark:text-slate-50">
           {garmentTypeName}
         </h1>
 
-        <label className="flex flex-col gap-1 text-sm text-zinc-700 dark:text-zinc-300">
+        <label className="flex flex-col gap-1 text-sm text-slate-700 dark:text-slate-300">
           Label
           <input
             type="text"
             required
             value={label}
             onChange={(e) => setLabel(e.target.value)}
-            className="rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
+            className="rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50"
           />
         </label>
 
-        <label className="flex flex-col gap-1 text-sm text-zinc-700 dark:text-zinc-300">
+        <label className="flex flex-col gap-1 text-sm text-slate-700 dark:text-slate-300">
           Unit
           <select
             value={unit}
             onChange={(e) => setUnit(e.target.value as "cm" | "inch")}
-            className="rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
+            className="rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50"
           >
             <option value="cm">cm</option>
             <option value="inch">inch</option>
           </select>
         </label>
 
-        <div className="flex flex-col gap-3 border-t border-black/[.08] pt-4 dark:border-white/[.145]">
+        <div className="flex flex-col gap-3 border-t border-slate-200 pt-4 dark:border-slate-700">
           {fields.map((field) => (
             <label
               key={field.id}
-              className="flex flex-col gap-1 text-sm text-zinc-700 dark:text-zinc-300"
+              className="flex flex-col gap-1 text-sm text-slate-700 dark:text-slate-300"
             >
               {field.field_label} ({unit})
               <input
@@ -188,10 +188,10 @@ export default function MeasurementRecordDetailPage() {
                     [field.id]: e.target.value,
                   }))
                 }
-                className="rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
+                className="rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50"
               />
               {field.guide_instructions && (
-                <span className="text-xs text-zinc-500">
+                <span className="text-xs text-slate-500">
                   {field.guide_instructions}
                 </span>
               )}
@@ -199,13 +199,13 @@ export default function MeasurementRecordDetailPage() {
           ))}
         </div>
 
-        <label className="flex flex-col gap-1 text-sm text-zinc-700 dark:text-zinc-300">
+        <label className="flex flex-col gap-1 text-sm text-slate-700 dark:text-slate-300">
           Notes (optional)
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={3}
-            className="rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
+            className="rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50"
           />
         </label>
 
@@ -215,7 +215,7 @@ export default function MeasurementRecordDetailPage() {
           <button
             type="submit"
             disabled={pending}
-            className="h-11 flex-1 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] disabled:opacity-50 dark:hover:bg-[#ccc]"
+            className="h-11 flex-1 rounded-full bg-accent px-5 text-white transition-colors hover:bg-accent-hover disabled:opacity-50"
           >
             {pending ? "Saving..." : "Save changes"}
           </button>

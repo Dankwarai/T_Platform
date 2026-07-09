@@ -197,7 +197,7 @@ export function ReviewForm({
 const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 12,
     gap: 8,
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 8,
     padding: 12,
     minHeight: 70,
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   submitButton: {
-    backgroundColor: "#111",
+    backgroundColor: "#4f46e5",
   },
   submitButtonText: {
     color: "#fff",

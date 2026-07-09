@@ -116,16 +116,16 @@ export default function OrderDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-1 items-center justify-center bg-zinc-50 dark:bg-black">
-        <p className="text-zinc-600 dark:text-zinc-400">Loading...</p>
+      <div className="flex flex-1 items-center justify-center bg-slate-50 dark:bg-slate-900">
+        <p className="text-slate-600 dark:text-slate-400">Loading...</p>
       </div>
     );
   }
 
   if (!order) {
     return (
-      <div className="flex flex-1 items-center justify-center bg-zinc-50 dark:bg-black">
-        <p className="text-zinc-600 dark:text-zinc-400">Order not found.</p>
+      <div className="flex flex-1 items-center justify-center bg-slate-50 dark:bg-slate-900">
+        <p className="text-slate-600 dark:text-slate-400">Order not found.</p>
       </div>
     );
   }
@@ -134,23 +134,23 @@ export default function OrderDetailPage() {
   const isBuyer = order.buyer_id === currentUserId;
 
   return (
-    <div className="flex flex-1 flex-col items-center bg-zinc-50 px-6 py-10 dark:bg-black">
+    <div className="flex flex-1 flex-col items-center bg-slate-50 px-6 py-10 dark:bg-slate-900">
       <div className="flex w-full max-w-lg flex-col gap-4">
         <Link
           href="/orders"
-          className="text-sm text-zinc-600 underline dark:text-zinc-400"
+          className="text-sm text-slate-600 underline dark:text-slate-400"
         >
           ← Back to orders
         </Link>
 
-        <h1 className="text-2xl font-semibold text-black dark:text-zinc-50">
+        <h1 className="text-2xl font-semibold text-slate-800 dark:text-slate-50">
           Order {STATUS_LABELS[order.status] ?? order.status}
         </h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <p className="text-slate-600 dark:text-slate-400">
           {isSupplier ? "Buyer" : "Supplier"}:{" "}
           {isSupplier ? buyerName : order.supplier_profiles?.business_name}
         </p>
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <p className="text-slate-600 dark:text-slate-400">
           {order.fulfillment_type === "local_pickup"
             ? "Local pickup"
             : "Supplier shipping"}
@@ -174,7 +174,7 @@ export default function OrderDetailPage() {
           {items.map((item) => (
             <li
               key={item.id}
-              className="flex items-center justify-between rounded-md border border-black/[.08] bg-white p-3 text-sm dark:border-white/[.145] dark:bg-black"
+              className="flex items-center justify-between rounded-md border border-slate-200 bg-white p-3 text-sm dark:border-slate-700 dark:bg-slate-800"
             >
               <Link
                 href={`/products/${item.product_variants?.products?.id}`}
@@ -191,12 +191,12 @@ export default function OrderDetailPage() {
           ))}
         </ul>
 
-        <p className="text-right font-medium text-black dark:text-zinc-50">
+        <p className="text-right font-medium text-slate-800 dark:text-slate-50">
           Total: {order.total_amount}
         </p>
 
         {isSupplier && (
-          <p className="text-right text-sm text-zinc-500">
+          <p className="text-right text-sm text-slate-500">
             Platform fee (10%): -{order.platform_fee_amount} · You keep:{" "}
             {(order.total_amount - order.platform_fee_amount).toFixed(2)}
           </p>
@@ -209,7 +209,7 @@ export default function OrderDetailPage() {
             <button
               disabled={pending}
               onClick={() => updateStatus("confirmed")}
-              className="h-11 rounded-full bg-foreground px-5 text-background disabled:opacity-50"
+              className="h-11 rounded-full bg-accent px-5 text-white disabled:opacity-50"
             >
               Confirm order
             </button>
@@ -227,7 +227,7 @@ export default function OrderDetailPage() {
             <button
               disabled={pending}
               onClick={() => updateStatus("ready")}
-              className="h-11 rounded-full bg-foreground px-5 text-background disabled:opacity-50"
+              className="h-11 rounded-full bg-accent px-5 text-white disabled:opacity-50"
             >
               Mark ready
             </button>
@@ -236,7 +236,7 @@ export default function OrderDetailPage() {
             <button
               disabled={pending}
               onClick={() => updateStatus("completed")}
-              className="h-11 rounded-full bg-foreground px-5 text-background disabled:opacity-50"
+              className="h-11 rounded-full bg-accent px-5 text-white disabled:opacity-50"
             >
               Mark completed
             </button>
@@ -244,7 +244,7 @@ export default function OrderDetailPage() {
         </div>
 
         {order.status === "completed" && isBuyer && (
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-slate-500">
             Order complete — you can leave a review from each product&apos;s
             page.
           </p>

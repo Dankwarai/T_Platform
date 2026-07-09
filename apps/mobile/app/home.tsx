@@ -148,12 +148,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   subtitle: {
-    color: "#666",
+    color: "#475569",
   },
   button: {
     marginTop: 16,
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#e2e8f0",
     borderRadius: 24,
     paddingVertical: 12,
     paddingHorizontal: 24,
@@ -162,8 +162,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   primaryButton: {
-    backgroundColor: "#111",
-    borderColor: "#111",
+    backgroundColor: "#4f46e5",
+    borderColor: "#4f46e5",
   },
   primaryButtonText: {
     color: "#fff",

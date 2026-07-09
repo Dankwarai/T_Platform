@@ -58,24 +58,24 @@ export default function SupplierProductsPage() {
   }, [router]);
 
   return (
-    <div className="flex flex-1 flex-col items-center bg-zinc-50 px-6 py-10 dark:bg-black">
+    <div className="flex flex-1 flex-col items-center bg-slate-50 px-6 py-10 dark:bg-slate-900">
       <div className="flex w-full max-w-2xl flex-col gap-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold text-black dark:text-zinc-50">
+          <h1 className="text-2xl font-semibold text-slate-800 dark:text-slate-50">
             My products
           </h1>
           <Link
             href="/supplier/products/new"
-            className="h-10 rounded-full bg-foreground px-4 text-sm leading-10 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc]"
+            className="h-10 rounded-full bg-accent px-4 text-sm leading-10 text-white transition-colors hover:bg-accent-hover"
           >
             Add product
           </Link>
         </div>
 
         {loading ? (
-          <p className="text-zinc-600 dark:text-zinc-400">Loading...</p>
+          <p className="text-slate-600 dark:text-slate-400">Loading...</p>
         ) : products.length === 0 ? (
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-slate-600 dark:text-slate-400">
             No products yet — add your first one.
           </p>
         ) : (
@@ -93,7 +93,7 @@ export default function SupplierProductsPage() {
                 <li key={product.id}>
                   <Link
                     href={`/supplier/products/${product.id}`}
-                    className="flex items-center justify-between gap-3 rounded-md border border-black/[.08] bg-white p-4 transition-colors hover:bg-black/[.02] dark:border-white/[.145] dark:bg-black dark:hover:bg-white/[.03]"
+                    className="flex items-center justify-between gap-3 rounded-md border border-slate-200 bg-white p-4 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-800/60"
                   >
                     <div className="flex items-center gap-3">
                       {product.images.length > 0 && (
@@ -105,15 +105,15 @@ export default function SupplierProductsPage() {
                         />
                       )}
                       <div className="flex flex-col">
-                        <span className="font-medium text-black dark:text-zinc-50">
+                        <span className="font-medium text-slate-800 dark:text-slate-50">
                           {product.name}
                         </span>
-                        <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                        <span className="text-sm text-slate-600 dark:text-slate-400">
                           {product.product_categories?.name} · {priceRange}
                         </span>
                       </div>
                     </div>
-                    <span className="text-sm text-zinc-500">
+                    <span className="text-sm text-slate-500">
                       {product.rating_count > 0
                         ? `★ ${product.avg_rating.toFixed(1)} (${product.rating_count})`
                         : "No reviews yet"}

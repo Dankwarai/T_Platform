@@ -149,9 +149,9 @@ export function ReviewForm({ productId }: { productId: string }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-3 rounded-md border border-black/[.08] bg-white p-4 dark:border-white/[.145] dark:bg-black"
+      className="flex flex-col gap-3 rounded-md border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800"
     >
-      <h3 className="font-medium text-black dark:text-zinc-50">
+      <h3 className="font-medium text-slate-800 dark:text-slate-50">
         {reviewId ? "Edit your review" : "Leave a review"}
       </h3>
 
@@ -174,7 +174,7 @@ export function ReviewForm({ productId }: { productId: string }) {
         onChange={(e) => setComment(e.target.value)}
         placeholder="Comment (optional)"
         rows={3}
-        className="rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
+        className="rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50"
       />
 
       {error && <p className="text-sm text-red-600">{error}</p>}
@@ -183,7 +183,7 @@ export function ReviewForm({ productId }: { productId: string }) {
         <button
           type="submit"
           disabled={pending}
-          className="h-10 flex-1 rounded-full bg-foreground px-5 text-sm text-background transition-colors hover:bg-[#383838] disabled:opacity-50 dark:hover:bg-[#ccc]"
+          className="h-10 flex-1 rounded-full bg-accent px-5 text-sm text-white transition-colors hover:bg-accent-hover disabled:opacity-50"
         >
           {pending ? "Saving..." : reviewId ? "Update review" : "Submit review"}
         </button>

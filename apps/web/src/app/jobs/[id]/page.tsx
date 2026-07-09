@@ -172,16 +172,16 @@ export default function JobDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-1 items-center justify-center bg-zinc-50 dark:bg-black">
-        <p className="text-zinc-600 dark:text-zinc-400">Loading...</p>
+      <div className="flex flex-1 items-center justify-center bg-slate-50 dark:bg-slate-900">
+        <p className="text-slate-600 dark:text-slate-400">Loading...</p>
       </div>
     );
   }
 
   if (!job) {
     return (
-      <div className="flex flex-1 items-center justify-center bg-zinc-50 dark:bg-black">
-        <p className="text-zinc-600 dark:text-zinc-400">Job not found.</p>
+      <div className="flex flex-1 items-center justify-center bg-slate-50 dark:bg-slate-900">
+        <p className="text-slate-600 dark:text-slate-400">Job not found.</p>
       </div>
     );
   }
@@ -194,20 +194,20 @@ export default function JobDetailPage() {
     : job.tailor_profiles?.business_name;
 
   return (
-    <div className="flex flex-1 flex-col items-center bg-zinc-50 px-6 py-10 dark:bg-black">
+    <div className="flex flex-1 flex-col items-center bg-slate-50 px-6 py-10 dark:bg-slate-900">
       <div className="flex w-full max-w-sm flex-col gap-4">
-        <h1 className="text-2xl font-semibold text-black dark:text-zinc-50">
+        <h1 className="text-2xl font-semibold text-slate-800 dark:text-slate-50">
           {job.measurement_records?.label} · {job.garment_types?.name}
         </h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <p className="text-slate-600 dark:text-slate-400">
           {isTailor ? "Customer" : "Tailor"}: {counterpartName ?? "Unknown"}
         </p>
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <p className="text-slate-600 dark:text-slate-400">
           Status: {STATUS_LABELS[job.status] ?? job.status}
           {job.due_date ? ` · due ${job.due_date}` : ""}
         </p>
         {job.price !== null && (
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-slate-600 dark:text-slate-400">
             Price: {job.price} ({job.price_type}) ·{" "}
             {PAYMENT_STATUS_LABELS[job.payment_status] ?? job.payment_status}
           </p>
@@ -222,7 +222,7 @@ export default function JobDetailPage() {
           />
         )}
         {job.fitting_iteration_count > 0 && (
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-slate-500">
             Fitting adjustments so far: {job.fitting_iteration_count}
           </p>
         )}
@@ -233,9 +233,9 @@ export default function JobDetailPage() {
         {job.status === "requested" && isTailor && (
           <form
             onSubmit={handleAccept}
-            className="flex flex-col gap-3 rounded-md border border-black/[.08] p-4 dark:border-white/[.145]"
+            className="flex flex-col gap-3 rounded-md border border-slate-200 p-4 dark:border-slate-700"
           >
-            <h3 className="font-medium text-black dark:text-zinc-50">
+            <h3 className="font-medium text-slate-800 dark:text-slate-50">
               Accept this request
             </h3>
             {standardPrice !== null && (
@@ -263,14 +263,14 @@ export default function JobDetailPage() {
                 step="0.01"
                 value={priceInput}
                 onChange={(e) => setPriceInput(e.target.value)}
-                className="rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
+                className="rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50"
               />
             )}
             <div className="flex gap-3">
               <button
                 type="submit"
                 disabled={pending}
-                className="h-10 flex-1 rounded-full bg-foreground px-5 text-sm text-background disabled:opacity-50"
+                className="h-10 flex-1 rounded-full bg-accent px-5 text-sm text-white disabled:opacity-50"
               >
                 Accept
               </button>
@@ -300,7 +300,7 @@ export default function JobDetailPage() {
           <button
             disabled={pending}
             onClick={() => updateJob({ status: "in_progress" })}
-            className="h-11 rounded-full bg-foreground px-5 text-background disabled:opacity-50"
+            className="h-11 rounded-full bg-accent px-5 text-white disabled:opacity-50"
           >
             Start work
           </button>
@@ -320,7 +320,7 @@ export default function JobDetailPage() {
           <button
             disabled={pending}
             onClick={() => updateJob({ status: "ready_for_fitting" })}
-            className="h-11 rounded-full bg-foreground px-5 text-background disabled:opacity-50"
+            className="h-11 rounded-full bg-accent px-5 text-white disabled:opacity-50"
           >
             Mark ready for fitting
           </button>
@@ -328,12 +328,12 @@ export default function JobDetailPage() {
 
         {/* ready_for_fitting */}
         {job.status === "ready_for_fitting" && (isTailor || isCustomer) && (
-          <div className="flex flex-col gap-2 rounded-md border border-black/[.08] p-4 dark:border-white/[.145]">
-            <h3 className="font-medium text-black dark:text-zinc-50">
+          <div className="flex flex-col gap-2 rounded-md border border-slate-200 p-4 dark:border-slate-700">
+            <h3 className="font-medium text-slate-800 dark:text-slate-50">
               How did the fitting go?
             </h3>
             {job.fitting_iteration_count >= FITTING_ADJUSTMENT_CAP && (
-              <p className="text-sm text-zinc-500">
+              <p className="text-sm text-slate-500">
                 Adjustment limit reached — any response now will mark this
                 job completed.
               </p>
@@ -342,21 +342,21 @@ export default function JobDetailPage() {
               <button
                 disabled={pending}
                 onClick={() => handleFitConfirmation("yes")}
-                className="h-10 flex-1 rounded-full bg-foreground px-3 text-sm text-background disabled:opacity-50"
+                className="h-10 flex-1 rounded-full bg-accent px-3 text-sm text-white disabled:opacity-50"
               >
                 Fits well
               </button>
               <button
                 disabled={pending}
                 onClick={() => handleFitConfirmation("somewhat")}
-                className="h-10 flex-1 rounded-full border border-black/[.08] px-3 text-sm dark:border-white/[.145]"
+                className="h-10 flex-1 rounded-full border border-slate-200 px-3 text-sm dark:border-slate-700"
               >
                 Needs adjustment
               </button>
               <button
                 disabled={pending}
                 onClick={() => handleFitConfirmation("no")}
-                className="h-10 flex-1 rounded-full border border-black/[.08] px-3 text-sm dark:border-white/[.145]"
+                className="h-10 flex-1 rounded-full border border-slate-200 px-3 text-sm dark:border-slate-700"
               >
                 Doesn't fit
               </button>
@@ -369,7 +369,7 @@ export default function JobDetailPage() {
           <button
             disabled={pending}
             onClick={() => updateJob({ status: "ready_for_fitting" })}
-            className="h-11 rounded-full bg-foreground px-5 text-background disabled:opacity-50"
+            className="h-11 rounded-full bg-accent px-5 text-white disabled:opacity-50"
           >
             Mark adjustments done
           </button>
@@ -380,17 +380,17 @@ export default function JobDetailPage() {
           <button
             disabled={pending}
             onClick={() => updateJob({ status: "delivered" })}
-            className="h-11 rounded-full bg-foreground px-5 text-background disabled:opacity-50"
+            className="h-11 rounded-full bg-accent px-5 text-white disabled:opacity-50"
           >
             Mark delivered
           </button>
         )}
 
         <div className="mt-4 flex flex-col gap-2">
-          <h3 className="font-medium text-black dark:text-zinc-50">
+          <h3 className="font-medium text-slate-800 dark:text-slate-50">
             History
           </h3>
-          <ul className="flex flex-col gap-1 text-sm text-zinc-500">
+          <ul className="flex flex-col gap-1 text-sm text-slate-500">
             {history.map((h, i) => (
               <li key={i}>
                 {h.from_status

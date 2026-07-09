@@ -119,22 +119,22 @@ export default function NewMeasurementRecordPage() {
   }
 
   return (
-    <div className="flex flex-1 flex-col items-center bg-zinc-50 px-6 py-10 dark:bg-black">
+    <div className="flex flex-1 flex-col items-center bg-slate-50 px-6 py-10 dark:bg-slate-900">
       <form
         onSubmit={handleSubmit}
         className="flex w-full max-w-sm flex-col gap-4"
       >
-        <h1 className="text-2xl font-semibold text-black dark:text-zinc-50">
+        <h1 className="text-2xl font-semibold text-slate-800 dark:text-slate-50">
           New measurement record
         </h1>
 
-        <label className="flex flex-col gap-1 text-sm text-zinc-700 dark:text-zinc-300">
+        <label className="flex flex-col gap-1 text-sm text-slate-700 dark:text-slate-300">
           Garment type
           <select
             required
             value={garmentTypeId}
             onChange={(e) => setGarmentTypeId(e.target.value)}
-            className="rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
+            className="rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50"
           >
             <option value="" disabled>
               Select a garment type
@@ -147,7 +147,7 @@ export default function NewMeasurementRecordPage() {
           </select>
         </label>
 
-        <label className="flex flex-col gap-1 text-sm text-zinc-700 dark:text-zinc-300">
+        <label className="flex flex-col gap-1 text-sm text-slate-700 dark:text-slate-300">
           Label
           <input
             type="text"
@@ -155,16 +155,16 @@ export default function NewMeasurementRecordPage() {
             placeholder="e.g. Wedding suit - 2026"
             value={label}
             onChange={(e) => setLabel(e.target.value)}
-            className="rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
+            className="rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50"
           />
         </label>
 
-        <label className="flex flex-col gap-1 text-sm text-zinc-700 dark:text-zinc-300">
+        <label className="flex flex-col gap-1 text-sm text-slate-700 dark:text-slate-300">
           Unit
           <select
             value={unit}
             onChange={(e) => setUnit(e.target.value as "cm" | "inch")}
-            className="rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
+            className="rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50"
           >
             <option value="cm">cm</option>
             <option value="inch">inch</option>
@@ -172,11 +172,11 @@ export default function NewMeasurementRecordPage() {
         </label>
 
         {fields.length > 0 && (
-          <div className="flex flex-col gap-3 border-t border-black/[.08] pt-4 dark:border-white/[.145]">
+          <div className="flex flex-col gap-3 border-t border-slate-200 pt-4 dark:border-slate-700">
             {fields.map((field) => (
               <label
                 key={field.id}
-                className="flex flex-col gap-1 text-sm text-zinc-700 dark:text-zinc-300"
+                className="flex flex-col gap-1 text-sm text-slate-700 dark:text-slate-300"
               >
                 {field.field_label} ({unit})
                 <input
@@ -190,10 +190,10 @@ export default function NewMeasurementRecordPage() {
                       [field.id]: e.target.value,
                     }))
                   }
-                  className="rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
+                  className="rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50"
                 />
                 {field.guide_instructions && (
-                  <span className="text-xs text-zinc-500">
+                  <span className="text-xs text-slate-500">
                     {field.guide_instructions}
                   </span>
                 )}
@@ -202,13 +202,13 @@ export default function NewMeasurementRecordPage() {
           </div>
         )}
 
-        <label className="flex flex-col gap-1 text-sm text-zinc-700 dark:text-zinc-300">
+        <label className="flex flex-col gap-1 text-sm text-slate-700 dark:text-slate-300">
           Notes (optional)
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={3}
-            className="rounded-md border border-black/[.08] bg-white px-3 py-2 text-black dark:border-white/[.145] dark:bg-black dark:text-zinc-50"
+            className="rounded-md border border-slate-200 bg-white px-3 py-2 text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-50"
           />
         </label>
 
@@ -217,7 +217,7 @@ export default function NewMeasurementRecordPage() {
         <button
           type="submit"
           disabled={pending}
-          className="mt-2 h-11 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] disabled:opacity-50 dark:hover:bg-[#ccc]"
+          className="mt-2 h-11 rounded-full bg-accent px-5 text-white transition-colors hover:bg-accent-hover disabled:opacity-50"
         >
           {pending ? "Saving..." : "Save"}
         </button>
