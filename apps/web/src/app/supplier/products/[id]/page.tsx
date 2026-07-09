@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { getProductImageUrl } from "@/lib/product-image-url";
 
 type Category = { id: string; name: string };
 type Variant = {
@@ -24,6 +25,8 @@ export default function EditProductPage() {
   const [name, setName] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [description, setDescription] = useState("");
+  const [images, setImages] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
   const [variants, setVariants] = useState<Variant[]>([]);
   const [newVariant, setNewVariant] = useState({
     variant_name: "",
@@ -47,7 +50,7 @@ export default function EditProductPage() {
 
     const { data: product } = await supabase
       .from("products")
-      .select("name, category_id, description")
+      .select("name, category_id, description, images")
       .eq("id", id)
       .single();
 
@@ -55,6 +58,7 @@ export default function EditProductPage() {
       setName(product.name);
       setCategoryId(product.category_id);
       setDescription(product.description ?? "");
+      setImages(product.images ?? []);
     }
 
     const { data: productVariants } = await supabase
@@ -86,6 +90,67 @@ export default function EditProductPage() {
       setError(error.message);
     }
     setPending(false);
+  }
+
+  async function handleUploadImage(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+
+    setUploading(true);
+    setError(null);
+
+    const supabase = createClient();
+    const ext = file.name.split(".").pop() ?? "jpg";
+    const path = `${id}/${crypto.randomUUID()}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("product-images")
+      .upload(path, file, { contentType: file.type });
+
+    if (uploadError) {
+      setError(uploadError.message);
+      setUploading(false);
+      return;
+    }
+
+    const nextImages = [...images, path];
+    const { error: updateError } = await supabase
+      .from("products")
+      .update({ images: nextImages })
+      .eq("id", id);
+
+    if (updateError) {
+      setError(updateError.message);
+      setUploading(false);
+      return;
+    }
+
+    setImages(nextImages);
+    setUploading(false);
+  }
+
+  async function handleDeleteImage(path: string) {
+    setUploading(true);
+    setError(null);
+
+    const supabase = createClient();
+    await supabase.storage.from("product-images").remove([path]);
+
+    const nextImages = images.filter((p) => p !== path);
+    const { error: updateError } = await supabase
+      .from("products")
+      .update({ images: nextImages })
+      .eq("id", id);
+
+    if (updateError) {
+      setError(updateError.message);
+      setUploading(false);
+      return;
+    }
+
+    setImages(nextImages);
+    setUploading(false);
   }
 
   async function handleAddVariant(event: React.FormEvent<HTMLFormElement>) {
@@ -252,6 +317,46 @@ export default function EditProductPage() {
             Save product
           </button>
         </form>
+
+        <div className="flex flex-col gap-3">
+          <h2 className="text-lg font-medium text-black dark:text-zinc-50">
+            Images
+          </h2>
+
+          {images.length > 0 && (
+            <div className="flex flex-wrap gap-3">
+              {images.map((path) => (
+                <div key={path} className="relative">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={getProductImageUrl(path)}
+                    alt=""
+                    className="h-24 w-24 rounded-md object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteImage(path)}
+                    disabled={uploading}
+                    className="absolute -right-2 -top-2 h-6 w-6 rounded-full bg-red-600 text-xs text-white disabled:opacity-50"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <label className="flex h-10 w-fit cursor-pointer items-center rounded-full border border-black/[.08] px-4 text-sm transition-colors hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]">
+            {uploading ? "Uploading..." : "Add image"}
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              onChange={handleUploadImage}
+              disabled={uploading}
+              className="hidden"
+            />
+          </label>
+        </div>
 
         <div className="flex flex-col gap-3">
           <h2 className="text-lg font-medium text-black dark:text-zinc-50">

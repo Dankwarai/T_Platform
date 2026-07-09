@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getProductImageUrl } from "@/lib/product-image-url";
 import { BuyForm } from "./buy-form";
 import { ReviewForm } from "./review-form";
 
@@ -15,7 +16,7 @@ export default async function ProductDetailPage({
   const { data: product } = await supabase
     .from("products")
     .select(
-      "id, name, description, avg_rating, rating_count, supplier_id, supplier_profiles(business_name, location), product_categories(name)",
+      "id, name, description, images, avg_rating, rating_count, supplier_id, supplier_profiles(business_name, location), product_categories(name)",
     )
     .eq("id", id)
     .single();
@@ -54,6 +55,20 @@ export default async function ProductDetailPage({
         >
           ← Back to marketplace
         </Link>
+
+        {product.images.length > 0 && (
+          <div className="flex gap-3 overflow-x-auto">
+            {product.images.map((path: string) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={path}
+                src={getProductImageUrl(path)}
+                alt=""
+                className="h-48 w-48 flex-shrink-0 rounded-md object-cover"
+              />
+            ))}
+          </div>
+        )}
 
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-semibold text-black dark:text-zinc-50">

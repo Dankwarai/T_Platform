@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import {
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -8,7 +9,11 @@ import {
   View,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
+import { File } from "expo-file-system";
+import { randomUUID } from "expo-crypto";
 import { supabase } from "../../../lib/supabase";
+import { getProductImageUrl } from "../../../lib/product-image-url";
 
 type Category = { id: string; name: string };
 type Variant = {
@@ -30,6 +35,8 @@ export default function EditProductScreen() {
   const [name, setName] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [description, setDescription] = useState("");
+  const [images, setImages] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
   const [variants, setVariants] = useState<Variant[]>([]);
   const [newVariant, setNewVariant] = useState({
     variant_name: "",
@@ -53,7 +60,7 @@ export default function EditProductScreen() {
 
     const { data: product } = await supabase
       .from("products")
-      .select("name, category_id, description")
+      .select("name, category_id, description, images")
       .eq("id", id)
       .single();
 
@@ -61,6 +68,7 @@ export default function EditProductScreen() {
       setName(product.name);
       setCategoryId(product.category_id);
       setDescription(product.description ?? "");
+      setImages(product.images ?? []);
     }
 
     const { data: productVariants } = await supabase
@@ -90,6 +98,72 @@ export default function EditProductScreen() {
       setError(error.message);
     }
     setPending(false);
+  }
+
+  async function handlePickImage() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      quality: 0.8,
+    });
+    if (result.canceled || result.assets.length === 0) return;
+
+    const asset = result.assets[0];
+    setUploading(true);
+    setError(null);
+
+    const file = new File(asset.uri);
+    const arrayBuffer = await file.arrayBuffer();
+    const ext = asset.fileName?.split(".").pop() ?? "jpg";
+    const path = `${id}/${randomUUID()}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("product-images")
+      .upload(path, arrayBuffer, {
+        contentType: asset.mimeType ?? "image/jpeg",
+      });
+
+    if (uploadError) {
+      setError(uploadError.message);
+      setUploading(false);
+      return;
+    }
+
+    const nextImages = [...images, path];
+    const { error: updateError } = await supabase
+      .from("products")
+      .update({ images: nextImages })
+      .eq("id", id);
+
+    if (updateError) {
+      setError(updateError.message);
+      setUploading(false);
+      return;
+    }
+
+    setImages(nextImages);
+    setUploading(false);
+  }
+
+  async function handleDeleteImage(path: string) {
+    setUploading(true);
+    setError(null);
+
+    await supabase.storage.from("product-images").remove([path]);
+
+    const nextImages = images.filter((p) => p !== path);
+    const { error: updateError } = await supabase
+      .from("products")
+      .update({ images: nextImages })
+      .eq("id", id);
+
+    if (updateError) {
+      setError(updateError.message);
+      setUploading(false);
+      return;
+    }
+
+    setImages(nextImages);
+    setUploading(false);
   }
 
   async function handleAddVariant() {
@@ -238,6 +312,38 @@ export default function EditProductScreen() {
         disabled={pending}
       >
         <Text style={styles.buttonText}>Save product</Text>
+      </Pressable>
+
+      <Text style={styles.sectionTitle}>Images</Text>
+
+      {images.length > 0 && (
+        <View style={styles.imageRow}>
+          {images.map((path) => (
+            <View key={path} style={styles.imageWrapper}>
+              <Image
+                source={{ uri: getProductImageUrl(path) }}
+                style={styles.thumbnail}
+              />
+              <Pressable
+                style={styles.imageDeleteButton}
+                onPress={() => handleDeleteImage(path)}
+                disabled={uploading}
+              >
+                <Text style={styles.imageDeleteButtonText}>×</Text>
+              </Pressable>
+            </View>
+          ))}
+        </View>
+      )}
+
+      <Pressable
+        style={[styles.smallButton, styles.addImageButton]}
+        onPress={handlePickImage}
+        disabled={uploading}
+      >
+        <Text style={styles.addImageButtonText}>
+          {uploading ? "Uploading..." : "Add image"}
+        </Text>
       </Pressable>
 
       <Text style={styles.sectionTitle}>Variants</Text>
@@ -489,6 +595,41 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderColor: "#ddd",
+  },
+  imageRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+  },
+  imageWrapper: {
+    position: "relative",
+  },
+  thumbnail: {
+    height: 80,
+    width: 80,
+    borderRadius: 8,
+  },
+  imageDeleteButton: {
+    position: "absolute",
+    top: -6,
+    right: -6,
+    height: 22,
+    width: 22,
+    borderRadius: 11,
+    backgroundColor: "#dc2626",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  imageDeleteButtonText: {
+    color: "#fff",
+    fontSize: 13,
+    fontWeight: "600",
+  },
+  addImageButton: {
+    alignSelf: "flex-start",
+  },
+  addImageButtonText: {
+    fontSize: 13,
   },
   primaryButton: {
     backgroundColor: "#111",

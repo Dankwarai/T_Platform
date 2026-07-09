@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { BuyForm } from "../../components/BuyForm";
 import { ProductReviewForm } from "../../components/ProductReviewForm";
 import { supabase } from "../../lib/supabase";
+import { getProductImageUrl } from "../../lib/product-image-url";
 
 type Product = {
   id: string;
   name: string;
   description: string | null;
+  images: string[];
   avg_rating: number;
   rating_count: number;
   supplier_id: string;
@@ -44,7 +46,7 @@ export default function ProductDetailScreen() {
       supabase
         .from("products")
         .select(
-          "id, name, description, avg_rating, rating_count, supplier_id, supplier_profiles(business_name, location), product_categories(name)",
+          "id, name, description, images, avg_rating, rating_count, supplier_id, supplier_profiles(business_name, location), product_categories(name)",
         )
         .eq("id", id)
         .single(),
@@ -89,6 +91,17 @@ export default function ProductDetailScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      {product.images.length > 0 && (
+        <ScrollView horizontal style={styles.imageScroll}>
+          {product.images.map((path) => (
+            <Image
+              key={path}
+              source={{ uri: getProductImageUrl(path) }}
+              style={styles.heroImage}
+            />
+          ))}
+        </ScrollView>
+      )}
       <Text style={styles.title}>{product.name}</Text>
       <Text style={styles.meta}>
         {product.product_categories?.name} · Sold by{" "}
@@ -158,6 +171,15 @@ const styles = StyleSheet.create({
   },
   bio: {
     marginTop: 8,
+  },
+  imageScroll: {
+    flexGrow: 0,
+  },
+  heroImage: {
+    height: 192,
+    width: 192,
+    borderRadius: 8,
+    marginRight: 12,
   },
   formWrapper: {
     marginTop: 12,

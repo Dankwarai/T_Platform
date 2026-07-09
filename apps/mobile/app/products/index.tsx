@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   FlatList,
+  Image,
   Pressable,
   StyleSheet,
   Text,
@@ -9,6 +10,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { supabase } from "../../lib/supabase";
+import { getProductImageUrl } from "../../lib/product-image-url";
 
 type Category = { id: string; name: string };
 type ProductResult = {
@@ -16,6 +18,7 @@ type ProductResult = {
   name: string;
   avg_rating: number;
   rating_count: number;
+  images: string[];
   supplier_profiles: { business_name: string } | null;
   product_categories: { name: string } | null;
   product_variants: { price: number }[];
@@ -44,7 +47,7 @@ export default function ProductsScreen() {
       let query = supabase
         .from("products")
         .select(
-          "id, name, avg_rating, rating_count, supplier_profiles(business_name), product_categories(name), product_variants(price)",
+          "id, name, avg_rating, rating_count, images, supplier_profiles(business_name), product_categories(name), product_variants(price)",
         )
         .order("created_at", { ascending: false });
 
@@ -112,6 +115,12 @@ export default function ProductsScreen() {
                 style={styles.card}
                 onPress={() => router.push(`/products/${item.id}`)}
               >
+                {item.images.length > 0 && (
+                  <Image
+                    source={{ uri: getProductImageUrl(item.images[0]) }}
+                    style={styles.thumbnail}
+                  />
+                )}
                 <View style={styles.cardBody}>
                   <Text style={styles.cardTitle}>{item.name}</Text>
                   <Text style={styles.meta}>
@@ -170,11 +179,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    gap: 10,
     borderWidth: 1,
     borderColor: "#ddd",
     borderRadius: 8,
     padding: 12,
     marginTop: 8,
+  },
+  thumbnail: {
+    height: 48,
+    width: 48,
+    borderRadius: 6,
   },
   cardBody: {
     flex: 1,

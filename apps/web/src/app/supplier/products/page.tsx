@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { getProductImageUrl } from "@/lib/product-image-url";
 
 type ProductRow = {
   id: string;
   name: string;
   avg_rating: number;
   rating_count: number;
+  images: string[];
   product_categories: { name: string } | null;
   product_variants: { price: number }[];
 };
@@ -45,7 +47,7 @@ export default function SupplierProductsPage() {
       const { data } = await supabase
         .from("products")
         .select(
-          "id, name, avg_rating, rating_count, product_categories(name), product_variants(price)",
+          "id, name, avg_rating, rating_count, images, product_categories(name), product_variants(price)",
         )
         .eq("supplier_id", supplierProfile.id)
         .order("created_at", { ascending: false });
@@ -91,15 +93,25 @@ export default function SupplierProductsPage() {
                 <li key={product.id}>
                   <Link
                     href={`/supplier/products/${product.id}`}
-                    className="flex items-center justify-between rounded-md border border-black/[.08] bg-white p-4 transition-colors hover:bg-black/[.02] dark:border-white/[.145] dark:bg-black dark:hover:bg-white/[.03]"
+                    className="flex items-center justify-between gap-3 rounded-md border border-black/[.08] bg-white p-4 transition-colors hover:bg-black/[.02] dark:border-white/[.145] dark:bg-black dark:hover:bg-white/[.03]"
                   >
-                    <div className="flex flex-col">
-                      <span className="font-medium text-black dark:text-zinc-50">
-                        {product.name}
-                      </span>
-                      <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                        {product.product_categories?.name} · {priceRange}
-                      </span>
+                    <div className="flex items-center gap-3">
+                      {product.images.length > 0 && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={getProductImageUrl(product.images[0])}
+                          alt=""
+                          className="h-14 w-14 rounded-md object-cover"
+                        />
+                      )}
+                      <div className="flex flex-col">
+                        <span className="font-medium text-black dark:text-zinc-50">
+                          {product.name}
+                        </span>
+                        <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                          {product.product_categories?.name} · {priceRange}
+                        </span>
+                      </div>
                     </div>
                     <span className="text-sm text-zinc-500">
                       {product.rating_count > 0

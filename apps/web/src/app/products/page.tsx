@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { getProductImageUrl } from "@/lib/product-image-url";
 
 type Category = { id: string; name: string };
 type ProductResult = {
@@ -10,6 +11,7 @@ type ProductResult = {
   name: string;
   avg_rating: number;
   rating_count: number;
+  images: string[];
   supplier_profiles: { business_name: string } | null;
   product_categories: { name: string } | null;
   product_variants: { price: number }[];
@@ -39,7 +41,7 @@ export default function ProductsPage() {
       let query = supabase
         .from("products")
         .select(
-          "id, name, avg_rating, rating_count, supplier_profiles(business_name), product_categories(name), product_variants(price)",
+          "id, name, avg_rating, rating_count, images, supplier_profiles(business_name), product_categories(name), product_variants(price)",
         )
         .order("created_at", { ascending: false });
 
@@ -104,16 +106,26 @@ export default function ProductsPage() {
                 <li key={product.id}>
                   <Link
                     href={`/products/${product.id}`}
-                    className="flex items-center justify-between rounded-md border border-black/[.08] bg-white p-4 transition-colors hover:bg-black/[.02] dark:border-white/[.145] dark:bg-black dark:hover:bg-white/[.03]"
+                    className="flex items-center justify-between gap-3 rounded-md border border-black/[.08] bg-white p-4 transition-colors hover:bg-black/[.02] dark:border-white/[.145] dark:bg-black dark:hover:bg-white/[.03]"
                   >
-                    <div className="flex flex-col">
-                      <span className="font-medium text-black dark:text-zinc-50">
-                        {product.name}
-                      </span>
-                      <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                        {product.supplier_profiles?.business_name} ·{" "}
-                        {product.product_categories?.name} · {priceRange}
-                      </span>
+                    <div className="flex items-center gap-3">
+                      {product.images.length > 0 && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={getProductImageUrl(product.images[0])}
+                          alt=""
+                          className="h-14 w-14 rounded-md object-cover"
+                        />
+                      )}
+                      <div className="flex flex-col">
+                        <span className="font-medium text-black dark:text-zinc-50">
+                          {product.name}
+                        </span>
+                        <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                          {product.supplier_profiles?.business_name} ·{" "}
+                          {product.product_categories?.name} · {priceRange}
+                        </span>
+                      </div>
                     </div>
                     <span className="text-sm text-zinc-500">
                       {product.rating_count > 0
