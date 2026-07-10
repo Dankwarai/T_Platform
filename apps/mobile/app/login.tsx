@@ -51,6 +51,10 @@ export default function LoginScreen() {
         onChangeText={setPassword}
       />
 
+      <Link href="/forgot-password" style={styles.forgotLink}>
+        Forgot password?
+      </Link>
+
       {error && <Text style={styles.error}>{error}</Text>}
 
       <Pressable
@@ -109,6 +113,10 @@ const styles = StyleSheet.create({
   link: {
     marginTop: 16,
     textAlign: "center",
+    textDecorationLine: "underline",
+  },
+  forgotLink: {
+    alignSelf: "flex-end",
     textDecorationLine: "underline",
   },
 });

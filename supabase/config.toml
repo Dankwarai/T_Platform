@@ -161,12 +161,16 @@ site_url = "http://localhost:3000"
 # external_url = ""
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
 # GoTrue matches these exactly (no wildcards), so both host forms are listed since `npm run dev`
-# is opened at localhost but curl/scripts in this repo tend to use 127.0.0.1.
+# is opened at localhost but curl/scripts in this repo tend to use 127.0.0.1. The recovery email
+# template (supabase/templates/recovery.html) uses {{ .RedirectTo }} directly, so whatever a
+# caller passes as redirectTo must be listed here or GoTrue silently falls back to site_url —
+# web passes .../auth/confirm, mobile passes the tflatform:// scheme from app.json.
 additional_redirect_urls = [
   "http://localhost:3000",
-  "http://localhost:3000/reset-password",
+  "http://localhost:3000/auth/confirm",
   "http://127.0.0.1:3000",
-  "http://127.0.0.1:3000/reset-password",
+  "http://127.0.0.1:3000/auth/confirm",
+  "tflatform://reset-password",
 ]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 (1 week).
 jwt_expiry = 3600

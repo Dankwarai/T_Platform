@@ -2,6 +2,14 @@
 
 <p>We received a request to reset your password. Follow the link below to choose a new one.</p>
 
-<p><a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/reset-password">Reset password</a></p>
+<!--
+  Deliberately not an <a href="...">: Go's html/template auto-escaper
+  treats non-http(s) schemes as unsafe inside a URL attribute and replaces
+  the whole value with "#ZgotmplZ" — verified locally, since this template
+  serves both the web link (http://...) and the mobile deep link
+  (tflatform://...) through the same {{ .RedirectTo }}. Plain text sidesteps
+  the escaper entirely and most mail clients still auto-linkify it.
+-->
+<p>{{ .RedirectTo }}?token_hash={{ .TokenHash }}&type=recovery</p>
 
 <p>If you didn't request this, you can safely ignore this email.</p>
