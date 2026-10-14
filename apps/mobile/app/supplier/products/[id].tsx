@@ -14,7 +14,9 @@ import { File } from "expo-file-system";
 import { randomUUID } from "expo-crypto";
 import { supabase } from "../../../lib/supabase";
 import { getStorageImageUrl } from "../../../lib/storage-image-url";
+import type { Database } from "@t-flatform/supabase-client";
 
+type ProductUnitType = Database["public"]["Enums"]["product_unit_type"];
 type Category = { id: string; name: string };
 type Variant = {
   id: string;
@@ -173,7 +175,9 @@ export default function EditProductScreen() {
     const { error } = await supabase.from("product_variants").insert({
       product_id: id,
       variant_name: newVariant.variant_name,
-      unit_type: newVariant.unit_type,
+      // newVariant.unit_type is a plain string state value, but UNIT_TYPES
+      // already constrains it to valid enum values at the UI layer.
+      unit_type: newVariant.unit_type as ProductUnitType,
       price: Number(newVariant.price),
       stock_quantity: Number(newVariant.stock_quantity || 0),
       sku: newVariant.sku || null,
@@ -204,7 +208,7 @@ export default function EditProductScreen() {
       .from("product_variants")
       .update({
         variant_name: variant.variant_name,
-        unit_type: variant.unit_type,
+        unit_type: variant.unit_type as ProductUnitType,
         price: variant.price,
         stock_quantity: variant.stock_quantity,
         sku: variant.sku || null,

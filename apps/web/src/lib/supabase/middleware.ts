@@ -15,6 +15,7 @@ const PROTECTED_PATHS = [
   "/products",
   "/orders",
   "/customer",
+  "/admin",
 ];
 const AUTH_ONLY_PATHS = ["/login", "/signup", "/forgot-password"];
 // /reset-password is deliberately in neither list. By the time it loads, the

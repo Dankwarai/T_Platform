@@ -11,6 +11,7 @@ import { useLocalSearchParams } from "expo-router";
 import { useAuth } from "../../contexts/auth-context";
 import { PayButton } from "../../components/PayButton";
 import { supabase } from "../../lib/supabase";
+import type { Database } from "@t-flatform/supabase-client";
 
 type Job = {
   id: string;
@@ -117,7 +118,7 @@ export default function JobDetailScreen() {
     load();
   }, [load]);
 
-  async function updateJob(fields: Record<string, unknown>) {
+  async function updateJob(fields: Database["public"]["Tables"]["jobs"]["Update"]) {
     setPending(true);
     setError(null);
     const { error: updateError } = await supabase

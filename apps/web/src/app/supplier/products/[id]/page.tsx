@@ -4,6 +4,9 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { getStorageImageUrl } from "@/lib/storage-image-url";
+import type { Database } from "@t-flatform/supabase-client";
+
+type ProductUnitType = Database["public"]["Enums"]["product_unit_type"];
 
 type Category = { id: string; name: string };
 type Variant = {
@@ -162,7 +165,10 @@ export default function EditProductPage() {
     const { error } = await supabase.from("product_variants").insert({
       product_id: id,
       variant_name: newVariant.variant_name,
-      unit_type: newVariant.unit_type,
+      // newVariant.unit_type is a plain string (React <select> values are
+      // always string), but UNIT_TYPES already constrains it to valid enum
+      // values at the UI layer.
+      unit_type: newVariant.unit_type as ProductUnitType,
       price: Number(newVariant.price),
       stock_quantity: Number(newVariant.stock_quantity || 0),
       sku: newVariant.sku || null,
@@ -194,7 +200,7 @@ export default function EditProductPage() {
       .from("product_variants")
       .update({
         variant_name: variant.variant_name,
-        unit_type: variant.unit_type,
+        unit_type: variant.unit_type as ProductUnitType,
         price: variant.price,
         stock_quantity: variant.stock_quantity,
         sku: variant.sku || null,

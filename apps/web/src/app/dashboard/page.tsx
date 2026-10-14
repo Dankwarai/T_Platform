@@ -122,6 +122,14 @@ export default async function DashboardPage() {
           My products
         </Link>
       )}
+      {profile?.role === "admin" && (
+        <Link
+          href="/admin"
+          className="h-11 rounded-full border border-solid border-slate-200 px-5 leading-[44px] transition-colors hover:border-transparent hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"
+        >
+          Admin panel
+        </Link>
+      )}
       <Link
         href="/orders"
         className="h-11 rounded-full border border-solid border-slate-200 px-5 leading-[44px] transition-colors hover:border-transparent hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"

@@ -4,7 +4,7 @@
 export type UUID = string;
 export type ISODateTime = string;
 
-export type UserRole = "tailor" | "customer" | "supplier";
+export type UserRole = "tailor" | "customer" | "supplier" | "admin";
 export type MeasurementUnit = "cm" | "inch";
 
 export interface User {

@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { PayButton } from "@/components/PayButton";
+import type { Database } from "@t-flatform/supabase-client";
 
 type Job = {
   id: string;
@@ -120,7 +121,7 @@ export default function JobDetailPage() {
     load();
   }, [load]);
 
-  async function updateJob(fields: Record<string, unknown>) {
+  async function updateJob(fields: Database["public"]["Tables"]["jobs"]["Update"]) {
     setPending(true);
     setError(null);
     const supabase = createClient();

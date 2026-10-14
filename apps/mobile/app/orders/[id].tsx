@@ -4,6 +4,7 @@ import { Link, useLocalSearchParams } from "expo-router";
 import { useAuth } from "../../contexts/auth-context";
 import { PayButton } from "../../components/PayButton";
 import { supabase } from "../../lib/supabase";
+import type { Database } from "@t-flatform/supabase-client";
 
 type Order = {
   id: string;
@@ -86,7 +87,9 @@ export default function OrderDetailScreen() {
     load();
   }, [load]);
 
-  async function updateStatus(status: string) {
+  async function updateStatus(
+    status: Database["public"]["Enums"]["order_status"],
+  ) {
     setPending(true);
     setError(null);
     const { error: updateError } = await supabase

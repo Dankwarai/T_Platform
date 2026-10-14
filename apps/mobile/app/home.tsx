@@ -129,6 +129,12 @@ export default function HomeScreen() {
         </Pressable>
       )}
 
+      {profile?.role === "admin" && (
+        <Pressable style={styles.button} onPress={() => router.push("/admin")}>
+          <Text style={styles.buttonText}>Admin</Text>
+        </Pressable>
+      )}
+
       <Pressable style={styles.button} onPress={() => router.push("/orders")}>
         <Text style={styles.buttonText}>
           {profile?.role === "supplier" ? "Orders received" : "My orders"}

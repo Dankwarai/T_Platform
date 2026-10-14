@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { PayButton } from "@/components/PayButton";
+import type { Database } from "@t-flatform/supabase-client";
 
 type Order = {
   id: string;
@@ -96,7 +97,9 @@ export default function OrderDetailPage() {
     load();
   }, [load]);
 
-  async function updateStatus(status: string) {
+  async function updateStatus(
+    status: Database["public"]["Enums"]["order_status"],
+  ) {
     setPending(true);
     setError(null);
     const supabase = createClient();
